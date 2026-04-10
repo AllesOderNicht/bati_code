@@ -1,0 +1,52 @@
+:root {
+  color-scheme: light;
+  --font-sans: "Montserrat", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    sans-serif;
+  --font-display: "Poppins", var(--font-sans);
+  --font-mono: "JetBrains Mono", "SFMono-Regular", ui-monospace, monospace;
+
+  --color-primary: #6d54ff;
+  --color-primary-strong: #5c42ff;
+  --color-primary-soft: #efe7ff;
+  --color-secondary: #ffffff;
+  --color-surface: rgba(255, 255, 255, 0.96);
+  --color-surface-muted: #f7efff;
+  --color-surface-alt: #eef0ff;
+  --color-surface-accent: #fff3d4;
+  --color-text: #1c398e;
+  --color-text-strong: #1d2140;
+  --color-text-muted: #4e5582;
+  --color-text-subtle: #61678f;
+  --color-border-strong: rgba(109, 84, 255, 0.24);
+  --color-border-soft: rgba(127, 138, 214, 0.18);
+  --color-progress-start: #ff9fc8;
+  --color-progress-end: #8b74ff;
+  --color-focus-ring: rgba(62, 99, 255, 0.4);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --radius-chip: 999px;
+  --radius-card: 32px;
+  --radius-option: 24px;
+
+  --shadow-card:
+    0 2px 0 rgba(40, 44, 90, 0.08),
+    0 18px 48px rgba(108, 83, 255, 0.18);
+  --shadow-card-soft:
+    0 2px 0 rgba(40, 44, 90, 0.08),
+    0 18px 48px rgba(109, 84, 255, 0.16);
+  --shadow-button:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 10px 22px rgba(109, 84, 255, 0.28);
+  --shadow-option:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 8px 18px rgba(102, 91, 214, 0.11);
+  --shadow-option-selected:
+    inset 0 0 0 2px rgba(109, 84, 255, 0.22),
+    0 12px 24px rgba(102, 91, 214, 0.16);
+}
