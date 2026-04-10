@@ -1,6 +1,8 @@
 import type { CompanyScoreProfile } from "../../domain/company/types";
 
 type AffinityInput = CompanyScoreProfile["dimensionAffinity"];
+const GLOBAL_RARITY_WEIGHT = 0.78;
+const MICROSOFT_RARITY_WEIGHT = 0.68;
 
 const archetypes = {
   productPulse: {
@@ -58,12 +60,14 @@ function scoreProfile(
   affinity: AffinityInput,
   tieBreakWeight: number,
   priorityQuestions?: Record<string, number>,
+  rarityWeight = 1,
 ): CompanyScoreProfile {
   return {
     companyId,
     dimensionAffinity: affinity,
     priorityQuestions,
     tieBreakWeight,
+    rarityWeight,
   };
 }
 
@@ -89,23 +93,16 @@ export const companyScoreProfiles: CompanyScoreProfile[] = [
   scoreProfile("lenovo", { ...archetypes.systemBuilder, peopleSense: 0.42 }, 0.71, { q03: 0.5, q16: 0.4 }),
   scoreProfile("beike", { ...archetypes.communityConnector, commercialFocus: 0.68 }, 0.72, { q12: 0.7, q22: 0.4 }),
   scoreProfile("boss", { ...archetypes.communityConnector, shipFast: 0.62 }, 0.73, { q13: 0.6, q22: 0.5 }),
-  scoreProfile("yonyou", { ...archetypes.systemBuilder, commercialFocus: 0.6 }, 0.69, { q18: 0.6, q20: 0.4 }),
-  scoreProfile("sensetime", { ...archetypes.frontierLab, systemThinking: 0.78 }, 0.76, { q06: 0.7, q25: 0.5 }),
-  scoreProfile("kingsoft", { ...archetypes.balancedCraft, systemThinking: 0.74 }, 0.7, { q15: 0.6, q16: 0.4 }),
   scoreProfile("liAuto", { ...archetypes.productPulse, peopleSense: 0.6, systemThinking: 0.58 }, 0.75, { q12: 0.5, q29: 0.7 }),
   scoreProfile("nio", { ...archetypes.communityConnector, frontierDrive: 0.52 }, 0.74, { q12: 0.6, q29: 0.6 }),
   scoreProfile("xpeng", { ...archetypes.frontierLab, commercialFocus: 0.45 }, 0.77, { q06: 0.6, q29: 0.7 }),
   scoreProfile("soul", { ...archetypes.communityConnector, peopleSense: 0.98, shipFast: 0.42 }, 0.72, { q05: 0.6, q30: 0.5 }),
-  scoreProfile("tongcheng", { ...archetypes.commerceEngine, peopleSense: 0.52 }, 0.68, { q17: 0.5, q24: 0.4 }),
-  scoreProfile("iflytek", { ...archetypes.frontierLab, commercialFocus: 0.52 }, 0.71, { q06: 0.5, q25: 0.5 }),
-  scoreProfile("microsoft", { ...archetypes.systemBuilder, peopleSense: 0.48 }, 0.86, { q08: 0.7, q15: 0.4 }),
-  scoreProfile("amazon", { ...archetypes.commerceEngine, systemThinking: 0.72 }, 0.89, { q11: 0.8, q16: 0.5 }),
-  scoreProfile("nvidia", { ...archetypes.frontierLab, craftDepth: 0.88 }, 0.93, { q06: 0.8, q23: 0.7 }),
-  scoreProfile("google", { ...archetypes.systemBuilder, frontierDrive: 0.76 }, 0.9, { q08: 0.7, q21: 0.6 }),
-  scoreProfile("meta", { ...archetypes.communityConnector, frontierDrive: 0.58, shipFast: 0.68 }, 0.81, { q05: 0.7, q30: 0.5 }),
-  scoreProfile("apple", { ...archetypes.balancedCraft, craftDepth: 0.95, systemThinking: 0.74 }, 0.92, { q03: 0.8, q14: 0.5 }),
-  scoreProfile("openai", { ...archetypes.frontierLab, peopleSense: 0.42 }, 0.91, { q06: 0.9, q25: 0.7 }),
-  scoreProfile("netflix", { ...archetypes.productPulse, peopleSense: 0.52, commercialFocus: 0.72 }, 0.8, { q10: 0.6, q28: 0.5 }),
-  scoreProfile("adobe", { ...archetypes.balancedCraft, craftDepth: 0.9, peopleSense: 0.66 }, 0.84, { q14: 0.7, q15: 0.4 }),
-  scoreProfile("salesforce", { ...archetypes.communityConnector, commercialFocus: 0.76, systemThinking: 0.7 }, 0.82, { q18: 0.7, q22: 0.5 }),
+  scoreProfile("microsoft", { ...archetypes.systemBuilder, peopleSense: 0.48 }, 0.86, { q08: 0.7, q15: 0.4 }, MICROSOFT_RARITY_WEIGHT),
+  scoreProfile("amazon", { ...archetypes.commerceEngine, systemThinking: 0.72 }, 0.89, { q11: 0.8, q16: 0.5 }, GLOBAL_RARITY_WEIGHT),
+  scoreProfile("nvidia", { ...archetypes.frontierLab, craftDepth: 0.88 }, 0.93, { q06: 0.8, q23: 0.7 }, GLOBAL_RARITY_WEIGHT),
+  scoreProfile("google", { ...archetypes.systemBuilder, frontierDrive: 0.76 }, 0.9, { q08: 0.7, q21: 0.6 }, GLOBAL_RARITY_WEIGHT),
+  scoreProfile("meta", { ...archetypes.communityConnector, frontierDrive: 0.58, shipFast: 0.68 }, 0.81, { q05: 0.7, q30: 0.5 }, GLOBAL_RARITY_WEIGHT),
+  scoreProfile("apple", { ...archetypes.balancedCraft, craftDepth: 0.95, systemThinking: 0.74 }, 0.92, { q03: 0.8, q14: 0.5 }, GLOBAL_RARITY_WEIGHT),
+  scoreProfile("openai", { ...archetypes.frontierLab, peopleSense: 0.42 }, 0.91, { q06: 0.9, q25: 0.7 }, GLOBAL_RARITY_WEIGHT),
+  scoreProfile("adobe", { ...archetypes.balancedCraft, craftDepth: 0.9, peopleSense: 0.66 }, 0.84, { q14: 0.7, q15: 0.4 }, GLOBAL_RARITY_WEIGHT),
 ];

@@ -23,15 +23,10 @@ const aliasMap: Record<string, string[]> = {
   lenovo: ["联想", "Lenovo"],
   beike: ["贝壳"],
   boss: ["BOSS", "BOSS直聘"],
-  yonyou: ["用友"],
-  sensetime: ["商汤", "SenseTime"],
-  kingsoft: ["金山", "Kingsoft"],
   liAuto: ["理想", "Li Auto"],
   nio: ["蔚来", "NIO"],
   xpeng: ["小鹏", "XPeng"],
   soul: ["Soul"],
-  tongcheng: ["同程", "同程旅行"],
-  iflytek: ["讯飞", "iFlytek"],
   microsoft: ["Microsoft", "微软"],
   amazon: ["Amazon", "亚麻"],
   nvidia: ["英伟达", "NVIDIA"],
@@ -39,9 +34,7 @@ const aliasMap: Record<string, string[]> = {
   meta: ["Facebook", "Meta"],
   apple: ["Apple", "苹果"],
   openai: ["OpenAI"],
-  netflix: ["Netflix", "奈飞"],
   adobe: ["Adobe"],
-  salesforce: ["Salesforce"],
 };
 
 export const companyGovernanceProfiles: CompanyGovernanceProfile[] =

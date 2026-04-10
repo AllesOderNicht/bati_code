@@ -120,10 +120,12 @@ export function scoreQuiz({
       const coreDimensionScore = Number(
         getCoreDimensionScore(dimensionScores, profile).toFixed(2),
       );
+      const rarityWeight = profile.rarityWeight ?? 1;
+      const adjustedScore = Number((score * rarityWeight).toFixed(2));
 
       return {
         companyId: profile.companyId,
-        score: Number(score.toFixed(2)),
+        score: adjustedScore,
         matchedDimensions,
         matchedKeywords: [...selectedKeywords].slice(0, 5),
         coreDimensionScore,

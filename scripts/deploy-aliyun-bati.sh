@@ -6,6 +6,11 @@ DOMAIN="${DEPLOY_DOMAIN:-www.alleschen.com}"
 BASE_PATH="${DEPLOY_BASE_PATH:-/bati}"
 REMOTE_TARGET="${1:-}"
 SSH_KEY_PATH="${SSH_KEY_PATH:-}"
+DEPLOY_ENABLE_HTTPS="${DEPLOY_ENABLE_HTTPS:-auto}"
+SSL_SEARCH_DIR="${SSL_SEARCH_DIR:-/ssl}"
+SSL_CERT_PATH="${SSL_CERT_PATH:-}"
+SSL_KEY_PATH="${SSL_KEY_PATH:-}"
+HTTP2_MODE="${HTTP2_MODE:-auto}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 TIMESTAMP="$(date +%Y%m%d%H%M%S)"
@@ -30,6 +35,11 @@ usage() {
   DEPLOY_DOMAIN=${DOMAIN}
   DEPLOY_BASE_PATH=${BASE_PATH}
   SSH_KEY_PATH=~/.ssh/your-key.pem
+  DEPLOY_ENABLE_HTTPS=${DEPLOY_ENABLE_HTTPS}
+  SSL_SEARCH_DIR=${SSL_SEARCH_DIR}
+  SSL_CERT_PATH=/ssl/fullchain.pem
+  SSL_KEY_PATH=/ssl/privkey.key
+  HTTP2_MODE=${HTTP2_MODE}
 
 要求:
   1. 本机已安装 ssh 与 tar
@@ -80,10 +90,11 @@ tar \
 
 echo "==> 解压源码并执行远程部署"
 ssh "${SSH_ARGS[@]}" "${REMOTE_TARGET}" \
-  "tar -xzf '${REMOTE_ARCHIVE}' -C '${REMOTE_SOURCE_DIR}' && \
+  "export DEPLOY_ENABLE_HTTPS='${DEPLOY_ENABLE_HTTPS}' SSL_SEARCH_DIR='${SSL_SEARCH_DIR}' SSL_CERT_PATH='${SSL_CERT_PATH}' SSL_KEY_PATH='${SSL_KEY_PATH}' HTTP2_MODE='${HTTP2_MODE}' && \
+  tar -xzf '${REMOTE_ARCHIVE}' -C '${REMOTE_SOURCE_DIR}' && \
   bash '${REMOTE_SOURCE_DIR}/scripts/deploy-aliyun-bati-remote.sh' '${REMOTE_SOURCE_DIR}' '${DOMAIN}' '${BASE_PATH}'"
 
 echo "==> 清理远程临时目录"
 ssh "${SSH_ARGS[@]}" "${REMOTE_TARGET}" "rm -rf '${REMOTE_TMP_DIR}'"
 
-echo "部署完成: http://${DOMAIN}${BASE_PATH}/"
+echo "部署完成，请以上方服务器输出的最终访问地址为准。"

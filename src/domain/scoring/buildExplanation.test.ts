@@ -8,6 +8,7 @@ const primaryResult: PrimaryCompanyResult = {
   companyId: "byte",
   displayNameZh: "字节跳动",
   score: 12,
+  matchPercentage: 96,
   reasonDimensions: ["shipFast", "commercialFocus"],
   reasonKeywords: ["推进快", "节奏在线", "有反馈就来劲"],
 };
@@ -33,7 +34,7 @@ describe("buildExplanation", () => {
     });
 
     expect(explanation.headline).toBe("你像字节派");
-    expect(explanation.reasonBullets[0]).toContain("推进速度");
+    expect(explanation.reasonBullets[0]).toContain("行动节奏");
     expect(explanation.reasonBullets[1]).toContain("推进快");
     expect(explanation.keywords).toEqual(["推进快", "节奏在线", "内容感"]);
   });

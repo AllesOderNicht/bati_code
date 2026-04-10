@@ -15,6 +15,7 @@ export type CompanyScoreProfile = {
   dimensionAffinity: Partial<Record<DimensionKey, number>>;
   priorityQuestions?: Record<string, number>;
   tieBreakWeight?: number;
+  rarityWeight?: number;
 };
 
 export type CompanyCopyProfile = {

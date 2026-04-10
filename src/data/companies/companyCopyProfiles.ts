@@ -1,56 +1,367 @@
 import type { CompanyCopyProfile } from "../../domain/company/types";
 
-const defaultTemplates = [
-  "你在 {dimension} 这一项上的命中感很强，所以很容易呈现出这家公司的典型气质。",
-  "当 {keyword} 这种状态出现时，你的选择会更像这一路线的做事方式。",
+export const companyCopyProfiles: CompanyCopyProfile[] = [
+  {
+    companyId: "byte",
+    headline: "你像字节派",
+    personaDescription:
+      "你对热度和新鲜感的嗅觉超灵，常常周围人还没反应过来，你已经在琢磨下一步了。一感觉对了就立刻来电，属于那种节奏拉满但又不让人觉得急的类型。朋友圈里你永远是最早发现新梗的人。",
+    keywords: ["节奏快", "新鲜感", "反应在线", "信号灵敏", "天生嗅觉"],
+    explanationTemplates: [
+      "你在 {dimension} 这条线上反应特别快，有一种天然的节奏感，遇事先动再说。",
+      "遇到 {keyword} 这类信号，你的兴奋感会率先启动，属于那种别人还在观望你已经冲了的人。",
+    ],
+  },
+  {
+    companyId: "baidu",
+    headline: "你像百度派",
+    personaDescription:
+      "你很会先把信息摸清楚再做判断，脑子里天然自带搜索引擎。别人还在凭直觉拍脑袋的时候，你已经默默把前因后果理清了。越聊越显得有章法，属于那种靠谱到让人想把难题甩给你的角色。",
+    keywords: ["清醒脑", "信息感", "有章法", "逻辑控", "沉得住"],
+    explanationTemplates: [
+      "你在 {dimension} 上特别讲究有据可依，先搜再动的习惯已经融进了你的日常。",
+      "碰到 {keyword} 这种场景，你的第一反应是先理清脉络再出手，很少盲目跟风。",
+    ],
+  },
+  {
+    companyId: "alibaba",
+    headline: "你像阿里派",
+    personaDescription:
+      "你擅长在很多选择里找到最顺的那条路，心里总有一种会拿捏的大局感。不管面前摆了多少选项，你总能快速分清哪条是捷径哪条是弯路。旁人觉得你做选择特别果断，其实你只是比别人多看了两步。",
+    keywords: ["会拿捏", "看全局", "路子多", "选择果断", "大局感"],
+    explanationTemplates: [
+      "你在 {dimension} 的维度上天然有一种全局视角，比大多数人更快看到整体轮廓。",
+      "当 {keyword} 成为关键词时，你会本能地把注意力放到最有价值的那个点上。",
+    ],
+  },
+  {
+    companyId: "tencent",
+    headline: "你像腾讯派",
+    personaDescription:
+      "你天然会照顾相处温度，既让人感觉被接住，也能把节奏留得很舒服。你很擅长让关系保持在不远不近刚刚好的位置，聊天时不会过度热情也不会冷场。朋友圈里你是那种默默连接所有人的中间节点。",
+    keywords: ["相处稳", "连接感", "留余地", "社交温度", "刚刚好"],
+    explanationTemplates: [
+      "你在 {dimension} 上有一种天生的分寸感，从来不会让人觉得被冒犯或被忽略。",
+      "遇到 {keyword} 相关的场景，你总能把氛围调到让所有人都舒服的频率上。",
+    ],
+  },
+  {
+    companyId: "pdd",
+    headline: "你像拼多多派",
+    personaDescription:
+      "你不太爱拖泥带水，喜欢又快又痛快地拿到那个最想要的答案。逛街时你是那个精准制导型选手——直奔目标，绝不多逛一步。在你看来效率本身就是一种快乐，弯路等于浪费快乐。",
+    keywords: ["直奔重点", "痛快感", "不绕弯", "精准制导", "效率即快乐"],
+    explanationTemplates: [
+      "你在 {dimension} 上的表现特别利落，不喜欢犹豫，认准了就一口气拿下。",
+      "一旦 {keyword} 出现在你的雷达上，你会跳过所有铺垫直接锁定目标。",
+    ],
+  },
+  {
+    companyId: "xiaohongshu",
+    headline: "你像小红书派",
+    personaDescription:
+      "你对氛围、审美和生活方式信号很敏锐，天然知道什么会让人想停下来多看两眼。你的生活里充满了被精心挑选过的细节——从早餐的摆盘到出门的穿搭，每一个角落都经得起放大看。你不一定追求贵，但一定追求对味。",
+    keywords: ["审美感", "氛围感", "生活方式", "细节敏锐", "会挑选"],
+    explanationTemplates: [
+      "你在 {dimension} 上特别挑剔，但那种挑剔不让人反感，反而让人想跟着你学。",
+      "碰到 {keyword} 这类主题，你的审美雷达会自动启动，挑出最有氛围感的那一个。",
+    ],
+  },
+  {
+    companyId: "dji",
+    headline: "你像大疆派",
+    personaDescription:
+      "你很在意手感、完成度和扎实感，越是细节密集的东西越能让你上头。你是那种拿到新东西会先翻过来看做工的人，一个缝隙没对齐都能被你发现。别人觉得差不多得了，你觉得差一点都不行。",
+    keywords: ["完成度", "手感党", "扎实派", "细节狂", "零容差"],
+    explanationTemplates: [
+      "你在 {dimension} 上特别较真，最后一公里的打磨对你来说才是最过瘾的。",
+      "遇到 {keyword} 类的东西，你的注意力会自动聚焦到最微小的差别上。",
+    ],
+  },
+  {
+    companyId: "minimax",
+    headline: "你像 MiniMax 派",
+    personaDescription:
+      "你会被新技术和新想象点燃，尤其喜欢那些一看就让人脑补很多画面的东西。你的脑海里永远有一半在想——如果这个东西再进化一点会怎样。对你来说，有趣比有用更值得追，可能性本身就是最大的奖励。",
+    keywords: ["模型感", "前沿感", "想象力", "脑补达人", "可能性猎手"],
+    explanationTemplates: [
+      "你在 {dimension} 上表现出很强的前瞻性，总能比周围人更早嗅到下一个有意思的方向。",
+      "当 {keyword} 出现时，你的大脑会自动切入探索模式，开始构建各种假设和画面。",
+    ],
+  },
+  {
+    companyId: "meituan",
+    headline: "你像美团派",
+    personaDescription:
+      "你很懂生活便利带来的快乐，擅长把城市日常过得又顺又有节奏。你是朋友里最会找餐厅的人，也是最会规划周末路线的人。在你看来，把一天安排得妥妥当当本身就是一种才华。",
+    keywords: ["城市感", "会安排", "生活便利", "路线规划", "日常节奏"],
+    explanationTemplates: [
+      "你在 {dimension} 上有一种把生活理顺的本能，任何混乱都会被你慢慢捋成秩序。",
+      "一旦涉及 {keyword}，你会本能地开始盘算最优路径，让一切变得又快又顺。",
+    ],
+  },
+  {
+    companyId: "kuaishou",
+    headline: "你像快手派",
+    personaDescription:
+      "你身上有一种真实又松弛的能量，不需要端着也能自然把气氛带热。你说话没有那种精心包装过的感觉，但每句都让人想接。在你的世界里，真诚比精致值钱一百倍，烟火气才是最高级的氛围感。",
+    keywords: ["真实感", "有人味", "烟火气", "松弛力", "天然暖场"],
+    explanationTemplates: [
+      "你在 {dimension} 上特别自然，不需要刻意准备，状态一到就自动在线。",
+      "碰到 {keyword} 这种调调，你的松弛感会让周围人也跟着放下包袱。",
+    ],
+  },
+  {
+    companyId: "jd",
+    headline: "你像京东派",
+    personaDescription:
+      "你偏爱那种靠谱、到位、让人心里很稳的感觉，不喜欢花里胡哨。你承诺的事从来不打折扣，说三天到就不会让人等到第四天。在你身上有一种稳的气场——不一定最酷，但绝对最让人放心。",
+    keywords: ["靠谱感", "到位派", "稳得住", "不打折扣", "说到做到"],
+    explanationTemplates: [
+      "你在 {dimension} 上的表现非常稳定，不追求炸场但从不掉链子。",
+      "当 {keyword} 成为考验时，你的可靠程度会让身边人自动把后背交给你。",
+    ],
+  },
+  {
+    companyId: "didi",
+    headline: "你像滴滴派",
+    personaDescription:
+      "你很会跟着场景变化走，越是在流动和切换中越能找到自己的节奏。你不怕变化，反而觉得一成不变才无聊。旅途中你是那个随遇而安的人——路线改了无所谓，只要方向还对就行。",
+    keywords: ["节奏感", "路感强", "城市流动", "随遇而安", "适应力"],
+    explanationTemplates: [
+      "你在 {dimension} 上有一种流动的节奏感，面对变化时反而越来越从容。",
+      "遇到 {keyword} 这类情景，你会自然切换频道，像换挡一样丝滑顺畅。",
+    ],
+  },
+  {
+    companyId: "bilibili",
+    headline: "你像哔哩哔哩派",
+    personaDescription:
+      "你有很强的兴趣表达欲，愿意为热爱花时间，也总能找到懂自己的人。你可以为一个冷门爱好研究三天三夜，也可以为一条弹幕乐半个小时。你的快乐不需要很多人理解，但一旦被理解就会加倍燃烧。",
+    keywords: ["兴趣浓度", "表达欲", "同好感", "为爱发电", "小众精通"],
+    explanationTemplates: [
+      "你在 {dimension} 上的投入度远超平均线，一旦进入心流状态就会忘记时间。",
+      "当 {keyword} 触发了你的兴趣开关，你会变成那个最有热情也最有耐心的人。",
+    ],
+  },
+  {
+    companyId: "huawei",
+    headline: "你像华为派",
+    personaDescription:
+      "你看东西会下意识往深处看，喜欢那种硬朗、耐久、经得住时间的质地。在你眼里，表面光鲜远不如底子扎实重要。你挑东西的标准很朴素——能用十年的永远比能炫一天的值得。",
+    keywords: ["硬朗感", "耐久派", "底层稳", "看底子", "长期主义"],
+    explanationTemplates: [
+      "你在 {dimension} 上的评判标准特别硬核，只有真正经得住考验的东西才能打动你。",
+      "遇到 {keyword} 这类品质，你会本能地多看两眼，因为这正是你最在意的质地。",
+    ],
+  },
+  {
+    companyId: "xiaomi",
+    headline: "你像小米派",
+    personaDescription:
+      "你很懂亲切和省心的魅力，偏爱那种一上手就觉得也太顺了的体验。你不追求最贵的，但一定要最顺手的。你的生活哲学是用最低的门槛获得最大的舒适感，性价比在你这里不是妥协而是智慧。",
+    keywords: ["亲切感", "省心感", "生活搭子", "顺手就好", "性价比脑"],
+    explanationTemplates: [
+      "你在 {dimension} 上有一种天然的亲和力，总能找到那个门槛最低但体验最顺的选项。",
+      "当 {keyword} 浮现时，你会自动筛掉那些花里胡哨的选项，精准锁定最实在的那一个。",
+    ],
+  },
+  {
+    companyId: "netease",
+    headline: "你像网易派",
+    personaDescription:
+      "你有稳定的品味和节奏，不一定最吵，但总能把细节处理得刚刚好。你的生活里有一种不急不躁但暗藏讲究的质感——音乐品味小众但高级，看的书冷门但有料。你享受的是那种只有自己知道的精致。",
+    keywords: ["审美稳定", "内容品味", "节奏从容", "暗藏讲究", "私藏美学"],
+    explanationTemplates: [
+      "你在 {dimension} 上的品味特别稳，不容易被潮流带跑，有自己一套不动声色的标准。",
+      "碰到 {keyword} 这种调性，你的内心会立刻共振，因为这恰好是你一直在找的频率。",
+    ],
+  },
+  {
+    companyId: "ant",
+    headline: "你像蚂蚁派",
+    personaDescription:
+      "你很在意分寸和安全感，喜欢那种心里有数、动作不慌的稳当状态。你不是不敢冒险，而是冒险之前一定先把退路想清楚。你的钱包和你的人一样——外表平静，内部井井有条。",
+    keywords: ["安全感", "分寸感", "心里有数", "有退路", "稳当状态"],
+    explanationTemplates: [
+      "你在 {dimension} 上有天然的风控意识，每一步都在心里默算过才会落脚。",
+      "遇到 {keyword} 这种特质，你会不自觉地靠近，因为这正是你最信任的行事方式。",
+    ],
+  },
+  {
+    companyId: "ctrip",
+    headline: "你像携程派",
+    personaDescription:
+      "你很懂被照顾到的微妙快乐，细节顺不顺常常会直接决定你的好感度。你是那种出门前把攻略做到精确到分钟的人——酒店离地铁多远、早餐几点开始、周边有没有好咖啡店，全在你的清单里。",
+    keywords: ["照顾感", "行程感", "细节控", "攻略达人", "体验至上"],
+    explanationTemplates: [
+      "你在 {dimension} 上的敏感度特别高，任何一个粗糙的环节都逃不过你的雷达。",
+      "当 {keyword} 出现在你的体验里，你的满意度会直线上升，因为你太懂被安排好的幸福了。",
+    ],
+  },
+  {
+    companyId: "lenovo",
+    headline: "你像联想派",
+    personaDescription:
+      "你偏稳妥陪伴型，喜欢那种不抢戏但能一直靠得住的东西和关系。你身上有一种老朋友才有的温度——不需要天天联系，但每次见面都让人觉得安心。你选东西的标准从来不是惊艳，而是还是它好。",
+    keywords: ["稳妥感", "陪伴感", "耐用派", "老友温度", "低调可靠"],
+    explanationTemplates: [
+      "你在 {dimension} 上追求的是那种不需要惊喜、只需要一直在的稳定陪伴。",
+      "遇到 {keyword} 这种品质，你会有一种被老朋友接住的安心感。",
+    ],
+  },
+  {
+    companyId: "beike",
+    headline: "你像贝壳派",
+    personaDescription:
+      "你重视信任和透明感，凡是能让人安心的安排都会让你特别有好感。你讨厌隐藏信息，讨厌模糊规则，讨厌让人猜来猜去的暗示。在你看来，关系也好选择也好，摊开说清楚永远比遮遮掩掩舒服一万倍。",
+    keywords: ["信任感", "透明感", "坦诚派", "反套路", "摊牌型"],
+    explanationTemplates: [
+      "你在 {dimension} 上特别看重透明度，越是清清楚楚的东西越容易赢得你的信任。",
+      "当 {keyword} 成为标签时，你会天然被吸引，因为你骨子里就讨厌含糊和试探。",
+    ],
+  },
+  {
+    companyId: "boss",
+    headline: "你像 BOSS 直聘派",
+    personaDescription:
+      "你说话偏直接，不爱绕弯子，反而会让人觉得相处起来很轻松。你的沟通风格是有什么说什么——不是没情商，而是觉得弯弯绕绕太累了。跟你聊天特别省脑子，因为你从不让人猜你在想什么。",
+    keywords: ["直给感", "不绕弯", "会接话", "省脑沟通", "爽快型"],
+    explanationTemplates: [
+      "你在 {dimension} 上的风格就是直球——不铺垫不试探，有话直说有事直办。",
+      "碰到 {keyword} 这种状态，你的表达欲会更强烈，因为这是你最擅长的沟通频道。",
+    ],
+  },
+  {
+    companyId: "liAuto",
+    headline: "你像理想派",
+    personaDescription:
+      "你很懂家庭场景里的舒服感，既会看体验也会想这个东西能不能陪人很久。你选东西时脑子里总会冒出一个画面——周末带家人用这个是什么感觉。你追求的不是最炫的，而是最能融进日常的。",
+    keywords: ["家庭感", "叙事感", "舒服派", "场景思维", "陪伴优先"],
+    explanationTemplates: [
+      "你在 {dimension} 上总会下意识地代入生活场景，把体验放进真实日常里去衡量。",
+      "当 {keyword} 出现在你的考量里，你的判断标准会自动切换到能不能让身边人也舒服。",
+    ],
+  },
+  {
+    companyId: "nio",
+    headline: "你像蔚来派",
+    personaDescription:
+      "你很重视陪伴和关系温度，喜欢那种大家待在一起就会慢慢变暖的感觉。你是朋友圈里那个总在组局的人——不一定非要做什么，只是觉得聚在一起本身就很好。你相信好的关系是养出来的，不是追出来的。",
+    keywords: ["陪伴感", "关系温度", "圈子感", "暖场型", "养关系"],
+    explanationTemplates: [
+      "你在 {dimension} 上的表现就像一个人形暖气片，不刻意输出但总能让周围慢慢升温。",
+      "遇到 {keyword} 这种氛围，你会本能地想留下来多待一会儿，因为这是你最享受的关系状态。",
+    ],
+  },
+  {
+    companyId: "xpeng",
+    headline: "你像小鹏派",
+    personaDescription:
+      "你对新鲜感和玩心特别来电，喜欢那些一上手就让人觉得也太新了吧的东西。你的好奇心不挑食，只要够新够酷你就想试试。你身边的人可能已经习惯了你隔三差五带回一个没人听说过的新玩意儿。",
+    keywords: ["科技感", "新鲜劲", "玩心重", "尝鲜控", "新奇猎手"],
+    explanationTemplates: [
+      "你在 {dimension} 上有一种猎犬式的敏感度，新东西一出现你就会立刻竖起耳朵。",
+      "碰到 {keyword} 这种刺激，你的体验欲会瞬间拉满，不亲手试一下绝不罢休。",
+    ],
+  },
+  {
+    companyId: "soul",
+    headline: "你像 Soul 派",
+    personaDescription:
+      "你更在意表达有没有被接住，轻松、真诚、能聊下去，对你来说特别重要。你不太喜欢目的性太强的社交，更偏爱那种也不知道聊什么但就是很舒服的状态。在你的世界里，情绪共鸣比信息交换值钱得多。",
+    keywords: ["情绪连接", "表达自由", "轻社交", "共鸣感", "慢聊天"],
+    explanationTemplates: [
+      "你在 {dimension} 上特别看重氛围和被理解的感觉，比起效率更在乎温度。",
+      "当 {keyword} 这种频率对上了，你会觉得整个对话都亮了起来，时间也变慢了。",
+    ],
+  },
+  {
+    companyId: "microsoft",
+    headline: "你像微软派",
+    personaDescription:
+      "你喜欢万物归位的秩序感，也偏爱那种稳扎稳打、能长久陪伴的东西。你的桌面永远是整整齐齐的，文件夹按日期命名，连手机壁纸都用了三年没换。在你看来，好的东西不需要追潮流，经得起时间的才算真的好。",
+    keywords: ["万物归位", "稳扎稳打", "耐用感", "秩序控", "经典派"],
+    explanationTemplates: [
+      "你在 {dimension} 上追求的是那种十年如一日的可靠，花哨的东西很难打动你。",
+      "遇到 {keyword} 这种感觉，你会有一种对了就是这个的踏实感，然后长期坚持下去。",
+    ],
+  },
+  {
+    companyId: "amazon",
+    headline: "你像亚马逊派",
+    personaDescription:
+      "你做决定很利落，认准了就会马上动，拖泥带水反而会让你浑身难受。你的购物车从来不过夜——想好了就下单，犹豫超过三分钟就说明不够想要。你相信速度本身就是一种判断力，能快绝不慢。",
+    keywords: ["利落感", "说干就干", "不犹豫", "速度即判断", "行动派"],
+    explanationTemplates: [
+      "你在 {dimension} 上的果断程度远超平均线，在别人还在对比参数时你已经开始体验了。",
+      "碰到 {keyword} 这种节奏，你的行动力会直接满格，想清楚再动根本不是你的风格。",
+    ],
+  },
+  {
+    companyId: "nvidia",
+    headline: "你像 NVIDIA 派",
+    personaDescription:
+      "你看重上限和硬核感，越是很顶、很强、很能打出新鲜体验的东西越容易让你着迷。你对够用就好这个词完全免疫——在你的字典里只有最好和还不够好。你不是在追求极致，你是在享受极致。",
+    keywords: ["算力引擎", "硬核前沿", "性能脑", "极致控", "上限思维"],
+    explanationTemplates: [
+      "你在 {dimension} 上有一种天然的跑分心态，不把性能拉到最高你心里就不踏实。",
+      "当 {keyword} 出现时，你的瞳孔会不自觉地放大，因为这正好戳中了你最在意的那个点。",
+    ],
+  },
+  {
+    companyId: "google",
+    headline: "你像谷歌派",
+    personaDescription:
+      "你对清晰、好奇和探索欲有天然偏爱，喜欢把很多线索慢慢连成一张图。你的快乐来源不是找到答案，而是在寻找答案的路上发现了三个新问题。你的大脑像一张不断扩展的网，每条新线索都会让你兴奋。",
+    keywords: ["好奇心", "清晰脑", "探索欲", "连线思维", "问题猎人"],
+    explanationTemplates: [
+      "你在 {dimension} 上有一种无法停止的探索冲动，已知的东西对你来说远不如未知有吸引力。",
+      "碰到 {keyword} 这种线索，你会兴奋地开始拉线搜索，直到把所有碎片拼完整。",
+    ],
+  },
+  {
+    companyId: "meta",
+    headline: "你像 Meta 派",
+    personaDescription:
+      "你很有热闹感，也愿意第一时间去试新鲜东西，属于社交能量比较足的一挂。你是朋友群里最活跃的那个，也是最早尝试新 App 的那个。你的社交不是为了维持关系，而是因为你真的喜欢那种人和人之间碰撞出的火花。",
+    keywords: ["热闹感", "爱试新", "社交能量", "活跃分子", "碰撞感"],
+    explanationTemplates: [
+      "你在 {dimension} 上的能量值特别高，热闹的场子总能让你越来越亢奋。",
+      "遇到 {keyword} 这种氛围，你会像鱼回到水里一样自在，社交电量瞬间充满。",
+    ],
+  },
+  {
+    companyId: "apple",
+    headline: "你像苹果派",
+    personaDescription:
+      "你重视完成度、手感和审美控制，喜欢那种看起来克制、摸起来却很上头的东西。你挑东西时有一种近乎直觉的标准——好的设计不需要解释，拿起来的第一秒就知道对不对。你相信少本身就是一种力量。",
+    keywords: ["完成度", "审美控", "手感党", "克制美学", "少即是多"],
+    explanationTemplates: [
+      "你在 {dimension} 上有一种近乎苛刻的审美标准，只有真正精致到骨子里的东西才入得了你的眼。",
+      "当 {keyword} 出现在你的世界里，你的满足感会从手指尖一直传到心里。",
+    ],
+  },
+  {
+    companyId: "openai",
+    headline: "你像 OpenAI 派",
+    personaDescription:
+      "你很容易被未来感和大想象点燃，脑海里总会冒出如果再往前一点会怎样这种念头。你不满足于当下的解法，总在想有没有更根本的方式。跟你聊天的人经常会觉得——你的脑回路好像比大家快了半个时代。",
+    keywords: ["前沿想象", "未来感", "脑洞大", "根本解", "快半步"],
+    explanationTemplates: [
+      "你在 {dimension} 上有一种天然的前瞻性，当下的东西对你来说永远只是起点。",
+      "碰到 {keyword} 这种概念，你的大脑会自动开始推演——如果这个成真了，然后呢。",
+    ],
+  },
+  {
+    companyId: "adobe",
+    headline: "你像 Adobe 派",
+    personaDescription:
+      "你身上有很强的创作欲，也愿意为细节和手感多花一点耐心。你的快乐来自从零到有的那个过程——可以是一张图、一段视频、一首歌或者一桌菜。你不追求速度，追求的是做出来的那一刻心里说一句这就对了。",
+    keywords: ["创作欲", "细节控", "手感好", "从零到有", "这就对了"],
+    explanationTemplates: [
+      "你在 {dimension} 上的表现充满创造力，每次动手的过程对你来说都像在完成一件作品。",
+      "遇到 {keyword} 这种手感，你的创作欲会被瞬间点燃，不做点什么你浑身难受。",
+    ],
+  },
 ];
-
-type CopySeed = Omit<CompanyCopyProfile, "explanationTemplates">;
-
-const copySeeds: CopySeed[] = [
-  { companyId: "byte", headline: "你像字节派", personaDescription: "你对反馈和节奏特别敏感，脑子里总有下一版要怎么更顺的冲动。", keywords: ["推进快", "内容感", "反应在线"] },
-  { companyId: "baidu", headline: "你像百度派", personaDescription: "你更像那种先把信息摸清，再用方法把问题压住的人。", keywords: ["方法派", "信息密度", "技术底盘"] },
-  { companyId: "alibaba", headline: "你像阿里派", personaDescription: "你天然会从业务结构和资源协同去看问题，越复杂越能找到路径。", keywords: ["商业感", "组织力", "平台思维"] },
-  { companyId: "tencent", headline: "你像腾讯派", personaDescription: "你做事有连接感，既会顾及合作体验，也知道怎样把产品打磨得更稳。", keywords: ["连接感", "协作向", "产品稳"] },
-  { companyId: "pdd", headline: "你像拼多多派", personaDescription: "你很看重结果落地，脑海里常常是怎么更快把关键指标推上去。", keywords: ["结果导向", "极致效率", "增长脑"] },
-  { companyId: "xiaohongshu", headline: "你像小红书派", personaDescription: "你对氛围、审美和生活方式信号很敏锐，天然知道什么会让人愿意分享。", keywords: ["审美感", "社区感", "生活方式"] },
-  { companyId: "dji", headline: "你像大疆派", personaDescription: "你喜欢把产品打磨到真正顺手，成品感和完成度对你很重要。", keywords: ["硬核打磨", "工程感", "完成度"] },
-  { companyId: "minimax", headline: "你像 MiniMax 派", personaDescription: "你会被新技术和新想象点燃，尤其擅长把前沿感变成有画面的体验。", keywords: ["模型感", "前沿感", "想象力"] },
-  { companyId: "meituan", headline: "你像美团派", personaDescription: "你有很强的地面执行感，擅长把复杂链路拆成能跑起来的动作。", keywords: ["地面感", "执行力", "本地服务"] },
-  { companyId: "kuaishou", headline: "你像快手派", personaDescription: "你身上有一种真实又松弛的能量，能把内容和人之间的温度接起来。", keywords: ["真实感", "社区温度", "内容生命力"] },
-  { companyId: "jd", headline: "你像京东派", personaDescription: "你信任可靠的交付和清晰的链路，属于越大盘越能稳住的人。", keywords: ["供应链感", "靠谱交付", "效率派"] },
-  { companyId: "didi", headline: "你像滴滴派", personaDescription: "你很会处理实时变化的场景，遇到复杂调度反而会更进入状态。", keywords: ["调度感", "实时决策", "城市流动"] },
-  { companyId: "bilibili", headline: "你像哔哩哔哩派", personaDescription: "你有很强的兴趣表达欲，愿意为热爱投入时间，也能带出社群氛围。", keywords: ["兴趣浓度", "表达欲", "社群气质"] },
-  { companyId: "huawei", headline: "你像华为派", personaDescription: "你看问题会天然下沉到底层，喜欢搭真正经得住时间的能力。", keywords: ["系统硬实力", "长期主义", "底层能力"] },
-  { companyId: "xiaomi", headline: "你像小米派", personaDescription: "你擅长在体验和效率之间找到平衡，让复杂产品变得更容易亲近。", keywords: ["产品亲和", "效率感", "生态协同"] },
-  { companyId: "netease", headline: "你像网易派", personaDescription: "你有稳定的品味和节奏，不一定最吵，但总能把细节做得很顺。", keywords: ["审美稳定", "内容品味", "节奏从容"] },
-  { companyId: "ant", headline: "你像蚂蚁派", personaDescription: "你自带一种风控和系统感，喜欢把复杂问题变成可信的规则。", keywords: ["金融科技", "风控感", "系统稳"] },
-  { companyId: "ctrip", headline: "你像携程派", personaDescription: "你很懂服务体验的微妙之处，细节顺不顺会直接影响你的判断。", keywords: ["服务体验", "行程感", "细节控"] },
-  { companyId: "lenovo", headline: "你像联想派", personaDescription: "你偏稳健协同型，擅长在多线程资源里保持整体交付。", keywords: ["全球交付", "硬件协同", "稳健派"] },
-  { companyId: "beike", headline: "你像贝壳派", personaDescription: "你重视信任和流程透明，喜欢把服务链路做得让人放心。", keywords: ["服务链路", "用户信任", "流程感"] },
-  { companyId: "boss", headline: "你像 BOSS 直聘派", personaDescription: "你说话和做事都偏直接有效，喜欢把机会和沟通成本同时拉低。", keywords: ["沟通效率", "机会连接", "直给感"] },
-  { companyId: "yonyou", headline: "你像用友派", personaDescription: "你适合把流程和管理问题慢慢理顺，是典型的企业服务脑。", keywords: ["企业服务", "流程治理", "管理感"] },
-  { companyId: "sensetime", headline: "你像商汤派", personaDescription: "你对视觉和模型世界有天然兴趣，喜欢把前沿能力往实际场景里推。", keywords: ["视觉智能", "科研感", "前沿底座"] },
-  { companyId: "kingsoft", headline: "你像金山派", personaDescription: "你偏长期打磨型，愿意在工具和软件体验上慢慢把基本功做深。", keywords: ["工具感", "软件功底", "长期打磨"] },
-  { companyId: "liAuto", headline: "你像理想派", personaDescription: "你很懂场景叙事，既会看体验也会看一个产品在真实生活里顺不顺。", keywords: ["家庭场景", "体验驱动", "产品叙事"] },
-  { companyId: "nio", headline: "你像蔚来派", personaDescription: "你有很强的用户关系意识，愿意把服务和社区经营得更有温度。", keywords: ["用户运营", "服务感", "社区连接"] },
-  { companyId: "xpeng", headline: "你像小鹏派", personaDescription: "你对新功能和前沿科技很来电，喜欢那种产品不断冒出新可能的感觉。", keywords: ["科技感", "自动驾驶", "新功能控"] },
-  { companyId: "soul", headline: "你像 Soul 派", personaDescription: "你更在意表达有没有被接住，轻松和真诚对你来说很重要。", keywords: ["情绪连接", "表达自由", "轻社交"] },
-  { companyId: "tongcheng", headline: "你像同程派", personaDescription: "你偏实用和顺手派，希望一切流程都能简单、稳定、少拐弯。", keywords: ["效率出行", "服务顺滑", "实用派"] },
-  { companyId: "iflytek", headline: "你像讯飞派", personaDescription: "你会被技术转化成实际场景的那一刻打动，尤其在语音与教育方向。", keywords: ["语音智能", "教育科技", "技术转化"] },
-  { companyId: "microsoft", headline: "你像微软派", personaDescription: "你自带一种平台和生产力气质，喜欢让系统更稳定、更通用、更耐用。", keywords: ["系统搭建", "生产力", "平台气质"] },
-  { companyId: "amazon", headline: "你像亚马逊派", personaDescription: "你执行很强，也习惯在规模和成本之间快速做权衡。", keywords: ["规模执行", "基础设施", "结果导向"] },
-  { companyId: "nvidia", headline: "你像 NVIDIA 派", personaDescription: "你看重性能上限和底层能力，越硬核的前沿问题越能激起你的兴趣。", keywords: ["算力引擎", "硬核前沿", "性能脑"] },
-  { companyId: "google", headline: "你像谷歌派", personaDescription: "你对信息组织和工程理想有天然好感，喜欢从系统层把事情做漂亮。", keywords: ["信息组织", "工程理想", "探索欲"] },
-  { companyId: "meta", headline: "你像 Meta 派", personaDescription: "你愿意大胆实验新产品，也擅长从连接和互动里找到机会。", keywords: ["连接世界", "产品实验", "社交底色"] },
-  { companyId: "apple", headline: "你像苹果派", personaDescription: "你重视一体化完成度，喜欢那种简洁但处处有控制感的体验。", keywords: ["审美完成度", "产品整合", "细节控制"] },
-  { companyId: "openai", headline: "你像 OpenAI 派", personaDescription: "你会被大模型和新范式的突破感激发，脑海里总有下一步想象。", keywords: ["前沿想象", "模型突破", "研究驱动"] },
-  { companyId: "netflix", headline: "你像 Netflix 派", personaDescription: "你很会判断什么值得直接推进，表达清晰、节奏果断。", keywords: ["内容工业", "体验直接", "决策清晰"] },
-  { companyId: "adobe", headline: "你像 Adobe 派", personaDescription: "你擅长在创意和工作流之间搭桥，既讲完成度也讲可用性。", keywords: ["创意工具", "工作流", "打磨稳定"] },
-  { companyId: "salesforce", headline: "你像 Salesforce 派", personaDescription: "你很懂关系管理和平台协同，能把增长和组织配合一起盘顺。", keywords: ["企业增长", "关系管理", "平台协同"] },
-];
-
-export const companyCopyProfiles: CompanyCopyProfile[] = copySeeds.map((seed) => ({
-  ...seed,
-  explanationTemplates: defaultTemplates,
-}));

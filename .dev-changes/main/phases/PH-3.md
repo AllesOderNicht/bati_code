@@ -51,6 +51,13 @@
 - [ ] 3.4 建立内容校验与风险守卫，保证关键词数量、文案字段和白名单状态满足上线要求。
 - [ ] 3.5 完成答题到结果页的集成测试、移动端细节检查和首版验收清单。
 
+## Bugfix Addendum
+- [ ] [BUGFIX] 同步收敛结果页主标题、人格描述、关键词、解释区和分享语气，移除工作、职场、招聘、业务、团队、增长、管理等职场化表达。
+- [ ] [BUGFIX] 调整结果页解释模板与命中维度文案，确保“你为什么像它”的说明只落在性格、生活方式、爱好、社交风格、审美和日常行为偏好，不回到协作、组织或业务语境。
+- [ ] [BUGFIX] 扩展内容守卫边界，不只校验结果页风险词，还要校验题库和结果文案是否越过非工作场景的语义边界。
+- [ ] [BUGFIX] 更新结果页测试、集成测试和固定样例，移除对职场语境题目的依赖，改为基于生活化题库和去职场化结果文案断言。
+- [ ] [BUGFIX] 增加题库与结果联动验证，确保题目已去职场化时，结果页生成的解释、关键词和分享文案也不会重新泄露工作语义。
+
 ## Test Cases
 | Test Name | Input | Expected Output |
 |-----------|-------|-----------------|
@@ -59,6 +66,8 @@
 | 白名单失效兜底 | 主结果公司被标记为不可展示 | 页面进入兜底状态，不输出危险结果 |
 | 重新测试回流 | 用户点击重新测试 | 清空结果并回到答题起点 |
 | 集成主路径 | 用户完成答题后进入结果页 | 展示与算法结果一致的中文公司名和解释信息 |
+| 结果文案去职场化 | 人格描述、关键词或解释区出现业务、团队、招聘等职场表达 | 校验失败并阻止进入 ready 状态 |
+| 题库与结果联动守卫 | 题库已改为生活化，但结果解释仍回落到协作、管理或增长语义 | 集成测试失败并指出结果层残留问题 |
 
 ### Test Pseudo-code
 ```ts
@@ -79,6 +88,12 @@ test('restarts the quiz from the final result page', () => {
   // when: the restart action is triggered
   // then: result state clears and quiz session resets to the beginning
 });
+
+test('blocks workplace language in result explanations and integration fixtures', () => {
+  // given: a result payload or quiz fixture still contains workplace-oriented wording
+  // when: content validation and the quiz-result integration run
+  // then: validation fails or the fixture must be updated before the suite can pass
+});
 ```
 
 ## Edge Cases
@@ -86,6 +101,7 @@ test('restarts the quiz from the final result page', () => {
 - 某公司标签过长导致结果卡片换行拥挤 → 允许折行，但不能压坏主信息层级。
 - 用户在低性能设备上打开结果页 → 动效必须降级为基础过渡，不影响阅读。
 - `prefers-reduced-motion` 开启 → 结果切换仍清晰可辨，但不使用弹跳或位移动效。
+- 题库已改写成生活语境，但结果解释仍出现协作、增长、团队或业务表达 → 必须被守卫拦截，不能进入 ready 状态。
 
 ## No-Touch List
 | Item | Reason |
@@ -102,6 +118,7 @@ test('restarts the quiz from the final result page', () => {
 | 3.3 | 验证关键卡片、标签和解释区在移动端可见 | 先添加基础布局和轻量过渡 |
 | 3.4 | 验证非法关键词数量或未白名单公司会被拦截 | 先实现内容校验守卫和兜底状态 |
 | 3.5 | 验证完整主路径从答题到结果页稳定可用 | 先补集成测试，再修正边缘状态 |
+| [BUGFIX] 结果去职场化 | 验证结果页文案、解释区和集成样例不再命中职场语义 | 先扩展内容守卫，再更新结果文案和测试夹具 |
 
 ## Required Skills
 - `harness-task:tdd` — for each sub-task

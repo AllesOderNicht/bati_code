@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
+import { beforeEach } from "vitest";
 
 import { App } from "./App";
 import type { CompanyProfileRegistry } from "./domain/company/types";
@@ -88,6 +89,10 @@ const registry: CompanyProfileRegistry = {
 };
 
 describe("App", () => {
+  beforeEach(() => {
+    window.history.pushState({}, "", "/bati");
+  });
+
   it("renders the home hero before the quiz starts", () => {
     render(<App questions={demoQuestionBank} registry={registry} />);
 
@@ -107,7 +112,7 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "开始测你的厂味" }));
 
     expect(
-      screen.getByRole("heading", { name: "周五晚上更想怎么回血？" }),
+      screen.getByRole("heading", { name: "周末朋友突然约你出门，但你已经有自己的安排了，你会？" }),
     ).toBeInTheDocument();
     expect(screen.getByText("第 1 / 3 题")).toBeInTheDocument();
   });
@@ -124,7 +129,7 @@ describe("App", () => {
 
     await user.click(
       screen.getByRole("button", {
-        name: "刷点有意思的新产品，顺手记几条观察",
+        name: "看看约的是什么，听着有意思就换计划",
       }),
     );
     expect(nextButton).toBeEnabled();
@@ -132,9 +137,50 @@ describe("App", () => {
     await user.click(nextButton);
 
     expect(
-      screen.getByRole("heading", { name: "一个临时需求拍过来，你第一反应是？" }),
+      screen.getByRole("heading", { name: "看到一个刚出的新 APP 或新剧，你一般会？" }),
     ).toBeInTheDocument();
     expect(screen.getByText("第 2 / 3 题")).toBeInTheDocument();
+  });
+
+  it("does not show the previous button on the first question", async () => {
+    const user = userEvent.setup();
+
+    render(<App questions={demoQuestionBank} registry={registry} />);
+
+    await user.click(screen.getByRole("button", { name: "开始测你的厂味" }));
+
+    expect(screen.queryByRole("button", { name: "上一题" })).not.toBeInTheDocument();
+  });
+
+  it("navigates back to the previous question and preserves the answer", async () => {
+    const user = userEvent.setup();
+
+    render(<App questions={demoQuestionBank} registry={registry} />);
+
+    await user.click(screen.getByRole("button", { name: "开始测你的厂味" }));
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "看看约的是什么，听着有意思就换计划",
+      }),
+    );
+    await user.click(screen.getByRole("button", { name: "下一题" }));
+
+    expect(screen.getByText("第 2 / 3 题")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "上一题" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "上一题" }));
+
+    expect(screen.getByText("第 1 / 3 题")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "周末朋友突然约你出门，但你已经有自己的安排了，你会？" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: "看看约的是什么，听着有意思就换计划",
+      }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByRole("button", { name: "上一题" })).not.toBeInTheDocument();
   });
 
   it("finishes the quiz, shows the company result, and resets cleanly", async () => {
@@ -145,34 +191,45 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "开始测你的厂味" }));
     await user.click(
       screen.getByRole("button", {
-        name: "刷点有意思的新产品，顺手记几条观察",
+        name: "看看约的是什么，听着有意思就换计划",
       }),
     );
     await user.click(screen.getByRole("button", { name: "下一题" }));
     await user.click(
-      screen.getByRole("button", { name: "先看有没有更聪明的路径能省力" }),
+      screen.getByRole("button", { name: "直接下载或点开，好不好试了才知道" }),
     );
     await user.click(screen.getByRole("button", { name: "下一题" }));
     await user.click(
       screen.getByRole("button", {
-        name: "看起来随意，其实关键东西都秒拿到",
+        name: "找个有意思的背景或构图，拍出点不一样的感觉",
       }),
     );
     await user.click(screen.getByRole("button", { name: "查看结果" }));
 
     expect(
-      screen.getByRole("heading", { name: "你像字节派" }),
+      screen.getByRole("heading", { name: "96% 是字节跳动人" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("字节跳动")).toBeInTheDocument();
     expect(screen.getByText("推进快")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "再测一次" }));
 
     expect(
-      screen.getByRole("heading", { name: "BATI 大厂气质测试" }),
+      screen.getByRole("heading", { name: "周末朋友突然约你出门，但你已经有自己的安排了，你会？" }),
     ).toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: "开始测你的厂味" }));
     expect(screen.getByRole("button", { name: "下一题" })).toBeDisabled();
+  });
+
+  it("renders the company catalog route with logos, probabilities, and tags", () => {
+    window.history.pushState({}, "", "/bati/companies");
+
+    render(<App questions={demoQuestionBank} registry={registry} />);
+
+    expect(
+      screen.getByRole("heading", { name: "所有公司、标签和当前概率，一屏看完" }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("字节跳动").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("微软").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText(/系统已经按题库、维度权重和公司画像模型自动统计出的基础命中占比/)).toBeInTheDocument();
+    expect(screen.getByText("节奏快")).toBeInTheDocument();
   });
 });

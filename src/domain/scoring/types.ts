@@ -17,6 +17,7 @@ export type PrimaryCompanyResult = {
   companyId: string;
   displayNameZh: string;
   score: number;
+  matchPercentage: number;
   reasonDimensions: string[];
   reasonKeywords: string[];
   brandTags?: string[];

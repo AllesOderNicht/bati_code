@@ -1,304 +1,69 @@
-:root {
-  --font-sans:
-    "Montserrat", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-display:
-    "Poppins", "Montserrat", "PingFang SC", "Hiragino Sans GB", sans-serif;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --radius-card: 32px;
-  --radius-option: 24px;
-  --radius-chip: 999px;
-  --color-primary: #6f58ff;
-  --color-primary-soft: #eef0ff;
-  --color-secondary: #ffffff;
-  --color-surface: #ffffff;
-  --color-surface-alt: #f8f6ff;
-  --color-surface-muted: #fff7fb;
-  --color-surface-accent: #fff6c9;
-  --color-text-strong: #1c2344;
-  --color-text-muted: #4d5788;
-  --color-text-subtle: #6c7398;
-  --color-border-soft: rgba(111, 88, 255, 0.12);
-  --color-focus-ring: rgba(74, 92, 255, 0.48);
-  --color-progress-start: #ffb2d0;
-  --color-progress-end: #7c68ff;
-  --shadow-card:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 20px 48px rgba(124, 104, 255, 0.16);
-  --shadow-card-soft:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 18px 40px rgba(124, 104, 255, 0.14);
-  --shadow-option:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    0 12px 22px rgba(119, 103, 201, 0.12);
-  --shadow-option-selected:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 14px 24px rgba(107, 84, 232, 0.2);
-  --shadow-button:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 12px 22px rgba(109, 84, 255, 0.28);
-  font-family: var(--font-sans);
-  line-height: 1.5;
-  font-weight: 400;
-  background:
-    radial-gradient(
-      circle at top,
-      var(--color-surface-accent) 0%,
-      #ffd3e6 30%,
-      #d8ddff 68%,
-      #f4f6ff 100%
-    );
-  color: var(--color-text-strong);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import "tailwindcss";
 
-* {
-  box-sizing: border-box;
-}
+@theme {
+  --font-sans: "Geist Sans", "Inter", "ZCOOL KuaiLe", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", "ZCOOL KuaiLe",
+    ui-monospace, monospace;
+  --font-display: "JetBrains Mono", "ZCOOL KuaiLe", "SFMono-Regular",
+    ui-monospace, monospace;
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  background: inherit;
-}
+  --color-bg: rgb(247, 244, 237);
+  --color-surface: #fffaf2;
+  --color-surface-alt: #efe7da;
+  --color-foreground: #3b3025;
+  --color-muted: #7f6f5d;
+  --color-accent: #b98643;
+  --color-accent-fg: #fffaf2;
+  --color-accent-secondary: #9f6b50;
+  --color-border: rgba(125, 96, 67, 0.2);
+  --color-border-strong: rgba(125, 96, 67, 0.42);
+  --color-destructive: #c6614f;
+  --color-success: #5f8b55;
+  --color-accent-soft: rgba(185, 134, 67, 0.12);
+  --color-accent-secondary-soft: rgba(159, 107, 80, 0.11);
+  --color-accent-secondary-border: rgba(159, 107, 80, 0.3);
+  --color-logo-surface: rgba(255, 248, 238, 0.92);
+  --color-grid: rgba(125, 96, 67, 0.07);
 
-button {
-  font: inherit;
-  cursor: pointer;
-}
+  --shadow-sketch: 3px 3px 0px 0px rgba(125, 96, 67, 0.16);
+  --shadow-sketch-md: 6px 6px 0px 0px rgba(125, 96, 67, 0.2);
+  --shadow-glow: 0 0 12px rgba(185, 134, 67, 0.18);
+  --shadow-glow-focus: 0 0 16px rgba(185, 134, 67, 0.22),
+    0 0 4px rgba(185, 134, 67, 0.08);
 
-#root {
-  min-height: 100vh;
-}
+  --radius-wobbly: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --radius-wobbly-md: 15px 225px 15px 255px / 255px 15px 225px 15px;
+  --radius-wobbly-sm: 95px 4px 92px 5px / 5px 80px 6px 95px;
+  --radius-chip: 255px 12px 245px 14px / 14px 210px 12px 255px;
 
-.app-shell {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: var(--space-5);
-}
+  --animate-fade-in: fade-in 280ms ease-out;
 
-.quiz-layout {
-  width: min(100%, 560px);
-}
-
-.hero-card {
-  width: min(100%, 480px);
-  padding: 28px;
-  border-radius: var(--radius-card);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.95),
-    var(--color-surface-muted) 100%
-  );
-  box-shadow: var(--shadow-card);
-}
-
-.eyebrow {
-  margin: 0 0 var(--space-3);
-  color: var(--color-primary);
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.hero-card h1 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 6vw, 3.25rem);
-  line-height: 1.05;
-}
-
-.hero-copy {
-  margin: var(--space-4) 0 0;
-  color: var(--color-text-muted);
-  font-size: 1rem;
-}
-
-.result-meta {
-  display: inline-flex;
-  margin: var(--space-4) 0 0;
-  padding: var(--space-2) 14px;
-  border-radius: var(--radius-chip);
-  background: rgba(111, 88, 255, 0.12);
-  color: var(--color-primary);
-  font-size: 0.92rem;
-  font-weight: 700;
-}
-
-.quiz-card {
-  width: 100%;
-  padding: var(--space-5);
-  border-radius: var(--radius-card);
-  background: linear-gradient(
-    180deg,
-    var(--color-surface) 0%,
-    var(--color-surface-alt) 100%
-  );
-  box-shadow: var(--shadow-card-soft);
-}
-
-.progress-block {
-  margin-bottom: var(--space-4);
-}
-
-.progress-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-}
-
-.progress-copy {
-  margin: 0;
-  color: var(--color-text-subtle);
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.progress-track {
-  margin: var(--space-4) 0 0;
-  height: 14px;
-  border-radius: var(--radius-chip);
-  background: var(--color-border-soft);
-  overflow: hidden;
-}
-
-.progress-fill {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(
-    90deg,
-    var(--color-progress-start) 0%,
-    var(--color-progress-end) 100%
-  );
-  transition: width 160ms ease-out;
-}
-
-.quiz-card h1 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.65rem, 4vw, 2.35rem);
-  line-height: 1.18;
-}
-
-.options-grid {
-  display: grid;
-  gap: 14px;
-  margin: var(--space-5) 0 0;
-}
-
-.option-card {
-  width: 100%;
-  padding: 18px;
-  border: 0;
-  border-radius: var(--radius-option);
-  background: linear-gradient(180deg, var(--color-secondary) 0%, #f7f3ff 100%);
-  color: #29305d;
-  text-align: left;
-  box-shadow: var(--shadow-option);
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    background 160ms ease;
-}
-
-.option-card:hover {
-  transform: translateY(-1px);
-}
-
-.option-card:focus-visible {
-  outline: 3px solid var(--color-focus-ring);
-  outline-offset: 4px;
-}
-
-.option-card--selected {
-  background: linear-gradient(180deg, var(--color-primary-soft) 0%, #e4e7ff 100%);
-  box-shadow: var(--shadow-option-selected);
-}
-
-.primary-button {
-  margin-top: var(--space-5);
-  width: 100%;
-  padding: var(--space-4) 20px;
-  border: 0;
-  border-radius: var(--radius-chip);
-  background: linear-gradient(
-    180deg,
-    #8f74ff 0%,
-    var(--color-primary) 100%
-  );
-  color: var(--color-secondary);
-  font-size: 1rem;
-  font-weight: 700;
-  box-shadow: var(--shadow-button);
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    opacity 160ms ease;
-}
-
-.primary-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 14px 24px rgba(109, 84, 255, 0.3);
-}
-
-.primary-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
-  box-shadow: none;
-}
-
-.primary-button:focus-visible {
-  outline: 3px solid var(--color-focus-ring);
-  outline-offset: 4px;
-}
-
-.keyword-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-top: var(--space-5);
-}
-
-.keyword-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 14px;
-  border-radius: var(--radius-chip);
-  background: rgba(111, 88, 255, 0.1);
-  color: var(--color-primary);
-  font-size: 0.92rem;
-  font-weight: 700;
-}
-
-@media (max-width: 640px) {
-  .app-shell {
-    padding: var(--space-4);
-  }
-
-  .hero-card,
-  .quiz-card {
-    padding: 20px;
-    border-radius: 28px;
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
+@layer base {
+  body {
+    @apply m-0 min-w-[320px] min-h-screen bg-bg text-foreground font-sans antialiased;
+    background-image: linear-gradient(
+        var(--color-grid) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  ::selection {
+    background: rgba(185, 134, 67, 0.22);
+    color: var(--color-foreground);
   }
 }

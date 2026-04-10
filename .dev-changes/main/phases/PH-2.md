@@ -86,6 +86,14 @@
 - [ ] 2.5 实现解释提取逻辑，保证结果页可以说明“你为什么像它”。
 - [ ] 2.6 补充配置结构测试和算法单元测试，避免扩展公司池时引入隐性错误。
 
+## Bugfix Addendum
+- [ ] [BUGFIX] 全量重写 30 道题目，题干和选项只能围绕性格、生活、爱好、社交方式、审美、日常偏好、消费选择、情绪恢复和行为习惯等非工作场景表达。
+- [ ] [BUGFIX] 建立题库禁用边界，明确禁止工作、职场、团队、增长、面试、招聘、项目、业务、管理、组织、流程、KPI 等题型与词族进入题目标题、选项文案、关键词和解释素材。
+- [ ] [BUGFIX] 重审维度命名与维度标签，避免 `协作`、`结果导向`、`组织效率` 这类仍会把结果解释带回职场语境的命名残留。
+- [ ] [BUGFIX] 重审题库关键词与公司权重配置，确保不是只替换题面文案，而是连同底层映射一起从职场语义迁移到生活化语义。
+- [ ] [BUGFIX] 为题库增加语义边界校验与测试，覆盖题目标题、选项、关键词、维度标签和优先题配置，发现禁用词族或工作场景表达时必须失败。
+- [ ] [BUGFIX] 补充题库审查样例和代表性答案样本，验证重写后的题库仍能稳定驱动 `Top1` 结果，但不再依赖工作语境信号。
+
 ## Test Cases
 | Test Name | Input | Expected Output |
 |-----------|-------|-----------------|
@@ -95,6 +103,8 @@
 | 稳定 tie-break | 两家公司总分接近 | 系统按约定优先级稳定选出同一个 `Top1` |
 | 解释关键词提取 | 用户多次命中同类选项 | 解释结果包含对应维度和关键词 |
 | 配置字段完整性 | 某家公司缺少中文展示名 | 校验失败并指出缺失字段 |
+| 题库语义边界校验 | 题目或关键词出现团队、面试、增长、业务等禁用词族 | 校验失败并指出命中的工作化语义 |
+| 维度命名去职场化 | 维度标签或解释字段仍残留协作、管理、结果导向等职场表达 | 校验失败并要求回到生活化命名 |
 
 ### Test Pseudo-code
 ```ts
@@ -115,6 +125,12 @@ test('builds explanation from top matched dimensions and keywords', () => {
   // when: buildExplanation runs
   // then: explanation contains the strongest dimensions and relevant keywords
 });
+
+test('rejects question-bank copy that slips into workplace language', () => {
+  // given: a question title, option label, or keyword contains team/interview/growth/business wording
+  // when: question-bank semantic validation runs
+  // then: the validation fails and points to the offending field
+});
 ```
 
 ## Edge Cases
@@ -122,6 +138,7 @@ test('builds explanation from top matched dimensions and keywords', () => {
 - 某题配置了维度权重但未配置公司权重 → 应允许存在，但必须保证解释层仍能工作。
 - 某公司文案配置存在但算法配置缺失 → 校验失败，阻止该公司进入正式结果池。
 - 多家公司使用高度相似模板 → 允许存在，但解释关键词和关键题加权必须保留最少差异。
+- 题面改成生活化表达，但关键词、维度标签或优先题仍保留职场语义 → 应视为失败，不能算完成 bugfix。
 
 ## No-Touch List
 | Item | Reason |
@@ -139,6 +156,7 @@ test('builds explanation from top matched dimensions and keywords', () => {
 | 2.4 | 验证白名单和 tie-break 行为稳定 | 先实现过滤，再加优先级规则 |
 | 2.5 | 验证解释区能输出维度与关键词 | 先提取最高权重维度和去重关键词 |
 | 2.6 | 验证缺字段或禁用公司会触发失败 | 先补结构测试与配置守卫 |
+| [BUGFIX] 题库去职场化 | 验证题库标题、选项、关键词和维度命名不再命中工作语境 | 先建立语义边界校验，再批量重写题库和权重映射 |
 
 ## Required Skills
 - `harness-task:tdd` — for each sub-task

@@ -1,27 +1,30 @@
 :root {
   color-scheme: light;
-  --font-sans: "Montserrat", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-    sans-serif;
-  --font-display: "Poppins", var(--font-sans);
-  --font-mono: "JetBrains Mono", "SFMono-Regular", ui-monospace, monospace;
 
-  --color-primary: #6d54ff;
-  --color-primary-strong: #5c42ff;
-  --color-primary-soft: #efe7ff;
-  --color-secondary: #ffffff;
-  --color-surface: rgba(255, 255, 255, 0.96);
-  --color-surface-muted: #f7efff;
-  --color-surface-alt: #eef0ff;
-  --color-surface-accent: #fff3d4;
-  --color-text: #1c398e;
-  --color-text-strong: #1d2140;
-  --color-text-muted: #4e5582;
-  --color-text-subtle: #61678f;
-  --color-border-strong: rgba(109, 84, 255, 0.24);
-  --color-border-soft: rgba(127, 138, 214, 0.18);
-  --color-progress-start: #ff9fc8;
-  --color-progress-end: #8b74ff;
-  --color-focus-ring: rgba(62, 99, 255, 0.4);
+  --font-sans: "Geist Sans", "Inter", "ZCOOL KuaiLe", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-display: "JetBrains Mono", "ZCOOL KuaiLe", "SFMono-Regular",
+    ui-monospace, monospace;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", "ZCOOL KuaiLe",
+    ui-monospace, monospace;
+
+  --color-bg: rgb(247, 244, 237);
+  --color-surface: #fffaf2;
+  --color-surface-alt: #efe7da;
+  --color-foreground: #3b3025;
+  --color-muted: #7f6f5d;
+  --color-accent: #b98643;
+  --color-accent-fg: #fffaf2;
+  --color-accent-secondary: #9f6b50;
+  --color-border: rgba(125, 96, 67, 0.2);
+  --color-border-strong: rgba(125, 96, 67, 0.42);
+  --color-destructive: #c6614f;
+  --color-success: #5f8b55;
+  --color-accent-soft: rgba(185, 134, 67, 0.12);
+  --color-accent-secondary-soft: rgba(159, 107, 80, 0.11);
+  --color-accent-secondary-border: rgba(159, 107, 80, 0.3);
+  --color-logo-surface: rgba(255, 248, 238, 0.92);
+  --color-grid: rgba(125, 96, 67, 0.07);
 
   --space-1: 4px;
   --space-2: 8px;
@@ -30,23 +33,16 @@
   --space-5: 24px;
   --space-6: 32px;
 
-  --radius-chip: 999px;
-  --radius-card: 32px;
-  --radius-option: 24px;
+  --radius-wobbly: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --radius-wobbly-md: 15px 225px 15px 255px / 255px 15px 225px 15px;
+  --radius-wobbly-sm: 95px 4px 92px 5px / 5px 80px 6px 95px;
+  --radius-chip: 255px 12px 245px 14px / 14px 210px 12px 255px;
 
-  --shadow-card:
-    0 2px 0 rgba(40, 44, 90, 0.08),
-    0 18px 48px rgba(108, 83, 255, 0.18);
-  --shadow-card-soft:
-    0 2px 0 rgba(40, 44, 90, 0.08),
-    0 18px 48px rgba(109, 84, 255, 0.16);
-  --shadow-button:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 10px 22px rgba(109, 84, 255, 0.28);
-  --shadow-option:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    0 8px 18px rgba(102, 91, 214, 0.11);
-  --shadow-option-selected:
-    inset 0 0 0 2px rgba(109, 84, 255, 0.22),
-    0 12px 24px rgba(102, 91, 214, 0.16);
+  --shadow-sketch: 3px 3px 0px 0px rgba(125, 96, 67, 0.16);
+  --shadow-sketch-md: 6px 6px 0px 0px rgba(125, 96, 67, 0.2);
+  --shadow-glow: 0 0 12px rgba(185, 134, 67, 0.18);
+  --shadow-glow-focus: 0 0 16px rgba(185, 134, 67, 0.22),
+    0 0 4px rgba(185, 134, 67, 0.08);
+  --shadow-card: 3px 3px 0px 0px rgba(125, 96, 67, 0.12);
+  --shadow-card-hover: 0 0 12px rgba(185, 134, 67, 0.18);
 }

@@ -97,29 +97,31 @@ describe("quiz to result integration", () => {
     await user.click(screen.getByRole("button", { name: "开始测你的厂味" }));
     await user.click(
       screen.getByRole("button", {
-        name: "刷点有意思的新产品，顺手记几条观察",
+        name: "看看约的是什么，听着有意思就换计划",
       }),
     );
     await user.click(screen.getByRole("button", { name: "下一题" }));
     await user.click(
-      screen.getByRole("button", { name: "先看有没有更聪明的路径能省力" }),
+      screen.getByRole("button", { name: "直接下载或点开，好不好试了才知道" }),
     );
     await user.click(screen.getByRole("button", { name: "下一题" }));
     await user.click(
       screen.getByRole("button", {
-        name: "看起来随意，其实关键东西都秒拿到",
+        name: "找个有意思的背景或构图，拍出点不一样的感觉",
       }),
     );
     await user.click(screen.getByRole("button", { name: "查看结果" }));
 
-    expect(screen.getByRole("heading", { name: "你像字节派" })).toBeInTheDocument();
-    expect(screen.getByText("字节跳动")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "96% 是字节跳动人" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("BATI 结果已出炉")).toBeInTheDocument();
     expect(screen.getByText("推进快")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "再测一次" }));
 
     expect(
-      screen.getByRole("heading", { name: "BATI 大厂气质测试" }),
+      screen.getByRole("heading", { name: "周末朋友突然约你出门，但你已经有自己的安排了，你会？" }),
     ).toBeInTheDocument();
   });
 });

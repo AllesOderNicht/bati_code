@@ -13,7 +13,7 @@
 - 安装并启动 `nginx`
 - 构建前端产物
 - 发布到 `/var/www/www.alleschen.com/bati`
-- 写入 `nginx` 配置，使站点可通过 `http://www.alleschen.com/bati/` 访问
+- 写入 `nginx` 配置；如果服务器上存在可用证书，则自动切换为 `HTTPS`
 
 ## 先决条件
 
@@ -87,7 +87,7 @@ npm run deploy:aliyun -- root@你的服务器公网IP
 
 - 域名：`www.alleschen.com`
 - 部署路径：`/bati`
-- 对外访问地址：`http://www.alleschen.com/bati/`
+- 对外访问地址：默认 `http://www.alleschen.com/bati/`，若检测到证书则自动升级为 `https://www.alleschen.com/bati/`
 
 如需覆盖默认值：
 
@@ -103,6 +103,17 @@ DEPLOY_DOMAIN=www.alleschen.com DEPLOY_BASE_PATH=/bati bash scripts/deploy-aliyu
 - 如果使用服务器内拉代码模式，源码目录默认为：`/opt/www.alleschen.com/app`
 
 ## HTTPS 一键排查与修复
+
+现在部署脚本会优先尝试复用这套 HTTPS 逻辑：
+
+- 若部署时检测到 `/ssl` 下存在证书与私钥，或显式传入 `SSL_CERT_PATH` / `SSL_KEY_PATH`，会在发布完成后自动执行 HTTPS 配置
+- 若没有检测到可用证书，则保持 HTTP 部署，不会因此中断发布
+
+你也可以显式控制：
+
+- `DEPLOY_ENABLE_HTTPS=auto`：默认值，有证书就启用 HTTPS
+- `DEPLOY_ENABLE_HTTPS=off`：本次部署强制只走 HTTP
+- `DEPLOY_ENABLE_HTTPS=always`：本次部署强制执行 HTTPS 配置，若证书缺失则直接报错
 
 如果你已经把证书放进服务器的 `/ssl` 目录，但访问 `https://` 时提示“无法访问网站”或“连接被意外终止”，可以直接在服务器项目根目录执行：
 
@@ -147,5 +158,5 @@ SSL_CERT_PATH=/ssl/fullchain.pem SSL_KEY_PATH=/ssl/privkey.key bash scripts/fix-
 ## 说明
 
 - 脚本会自动把 `Vite` 构建前缀设置为 `/bati/`，避免静态资源路径错误。
-- 默认部署脚本仍只负责 `HTTP` 静态站点发布；如果需要启用 `HTTPS`，请额外执行 `scripts/fix-aliyun-bati-https.sh`。
+- 默认部署脚本会在检测到可用证书时自动启用 `HTTPS`；如果你只想单独修复证书或 `nginx` 配置，仍可直接执行 `scripts/fix-aliyun-bati-https.sh`。
 - 重新执行同一条命令即可覆盖部署最新前端版本。

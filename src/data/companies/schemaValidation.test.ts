@@ -12,6 +12,8 @@ import { companyCopyProfiles } from "./companyCopyProfiles";
 import { companyGovernanceProfiles } from "./companyGovernanceProfiles";
 import { companyScoreProfiles } from "./companyScoreProfiles";
 import { questionBank } from "../questions/questionBank";
+import { validateQuestionBankSemantics } from "../questions/questionBankValidation";
+import { DIMENSION_LABELS } from "../../domain/questions/types";
 
 const baseProfiles: CompanyBaseProfile[] = [
   {
@@ -82,8 +84,8 @@ describe("validateCompanyProfiles", () => {
   });
 
   it("keeps the shipped company registry and question bank complete", () => {
-    expect(companyBaseProfiles).toHaveLength(40);
-    expect(questionBank).toHaveLength(30);
+    expect(companyBaseProfiles).toHaveLength(33);
+    expect(questionBank).toHaveLength(12);
 
     expect(() =>
       validateCompanyProfiles({
@@ -91,6 +93,13 @@ describe("validateCompanyProfiles", () => {
         scoreProfiles: companyScoreProfiles,
         copyProfiles: companyCopyProfiles,
         governanceProfiles: companyGovernanceProfiles,
+      }),
+    ).not.toThrow();
+
+    expect(() =>
+      validateQuestionBankSemantics({
+        questions: questionBank,
+        dimensionLabels: DIMENSION_LABELS,
       }),
     ).not.toThrow();
   });

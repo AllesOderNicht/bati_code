@@ -74,6 +74,7 @@ describe("resolvePrimaryResult", () => {
 
     expect(result?.companyId).toBe("msft");
     expect(result?.displayNameZh).toBe("微软");
+    expect(result?.matchPercentage).toBe(92);
   });
 
   it("uses matched dimensions and tie break weight for stable selection", () => {
@@ -127,6 +128,7 @@ describe("resolvePrimaryResult", () => {
     });
 
     expect(result?.companyId).toBe("msft");
+    expect(result?.matchPercentage).toBe(73);
     expect(result?.reasonDimensions).toEqual(["craftDepth", "systemThinking"]);
   });
 });

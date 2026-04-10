@@ -12,6 +12,45 @@ type ResolvePrimaryResultInput = {
   tieThreshold?: number;
 };
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function calculateMatchPercentage(
+  sortedResults: RankedCompanyResult[],
+  tieThreshold: number,
+) {
+  const [topResult, secondResult, thirdResult] = sortedResults;
+
+  if (!topResult) {
+    return 0;
+  }
+
+  if (!secondResult) {
+    return 92;
+  }
+
+  const comparisonResults = [topResult, secondResult, thirdResult].filter(
+    (result): result is RankedCompanyResult => Boolean(result),
+  );
+  const scorePool = comparisonResults.reduce(
+    (total, result) => total + Math.max(result.score, 0),
+    0,
+  );
+  const concentration = scorePool > 0 ? topResult.score / scorePool : 1;
+  const lead = topResult.score > 0
+    ? Math.max(0, topResult.score - secondResult.score)
+        / Math.max(topResult.score, tieThreshold)
+    : 0;
+  const coreStrength = topResult.score > 0
+    ? topResult.coreDimensionScore / topResult.score
+    : 0;
+
+  return Math.round(
+    clamp(58 + concentration * 20 + lead * 24 + coreStrength * 10, 61, 96),
+  );
+}
+
 export function resolvePrimaryResult({
   rankedResults,
   companyBaseProfiles,
@@ -64,6 +103,7 @@ export function resolvePrimaryResult({
       baseProfile?.displayNameZh ??
       topResult.companyId,
     score: topResult.score,
+    matchPercentage: calculateMatchPercentage(sortedResults, tieThreshold),
     reasonDimensions: topResult.matchedDimensions
       .slice(0, 3)
       .map((dimension) => dimension.key),
