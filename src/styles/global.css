@@ -1,6 +1,44 @@
-@import "./tokens.css";
-
 :root {
+  --font-sans:
+    "Montserrat", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-display:
+    "Poppins", "Montserrat", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --radius-card: 32px;
+  --radius-option: 24px;
+  --radius-chip: 999px;
+  --color-primary: #6f58ff;
+  --color-primary-soft: #eef0ff;
+  --color-secondary: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f8f6ff;
+  --color-surface-muted: #fff7fb;
+  --color-surface-accent: #fff6c9;
+  --color-text-strong: #1c2344;
+  --color-text-muted: #4d5788;
+  --color-text-subtle: #6c7398;
+  --color-border-soft: rgba(111, 88, 255, 0.12);
+  --color-focus-ring: rgba(74, 92, 255, 0.48);
+  --color-progress-start: #ffb2d0;
+  --color-progress-end: #7c68ff;
+  --shadow-card:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 20px 48px rgba(124, 104, 255, 0.16);
+  --shadow-card-soft:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 18px 40px rgba(124, 104, 255, 0.14);
+  --shadow-option:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 12px 22px rgba(119, 103, 201, 0.12);
+  --shadow-option-selected:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 14px 24px rgba(107, 84, 232, 0.2);
+  --shadow-button:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 12px 22px rgba(109, 84, 255, 0.28);
   font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
@@ -222,6 +260,24 @@ button {
 .primary-button:focus-visible {
   outline: 3px solid var(--color-focus-ring);
   outline-offset: 4px;
+}
+
+.keyword-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.keyword-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: var(--radius-chip);
+  background: rgba(111, 88, 255, 0.1);
+  color: var(--color-primary);
+  font-size: 0.92rem;
+  font-weight: 700;
 }
 
 @media (max-width: 640px) {

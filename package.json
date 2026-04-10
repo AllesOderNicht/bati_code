@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "deploy:aliyun": "bash ./scripts/deploy-aliyun-bati.sh",
+    "deploy:aliyun:server": "bash ./scripts/deploy-aliyun-bati-on-server.sh",
+    "repair:https:aliyun": "bash ./scripts/fix-aliyun-bati-https.sh",
     "test": "vitest run",
     "test:watch": "vitest"
   },
