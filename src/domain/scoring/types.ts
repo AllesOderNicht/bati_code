@@ -1,32 +1,38 @@
-export type MatchedDimension = {
-  key: string;
-  score: number;
-};
+import type { PersonaRarity } from "../persona/types";
 
-export type RankedCompanyResult = {
-  companyId: string;
+export type PersonaRankedResult = {
+  personaId: string;
   score: number;
-  matchedDimensions: MatchedDimension[];
   matchedKeywords: string[];
-  coreDimensionScore: number;
-  priorityHitScore: number;
-  tieBreakWeight: number;
 };
 
-export type PrimaryCompanyResult = {
-  companyId: string;
-  displayNameZh: string;
+export type SSRResult = {
+  triggered: boolean;
+  personaId: string;
+  rolledProbability: number;
+  boosted: boolean;
+};
+
+export type ConcentrationResult = {
+  triggered: boolean;
+  personaId: string;
+  companyGroup: string;
+  concentrationScore: number;
+};
+
+export type FinalPersonaResult = {
+  personaId: string;
+  source: "ssr" | "concentration" | "normal";
   score: number;
-  matchPercentage: number;
-  reasonDimensions: string[];
-  reasonKeywords: string[];
-  brandTags?: string[];
-  tieBreakWeight?: number;
+  matchedKeywords: string[];
 };
 
-export type ExplanationBlock = {
+export type PersonaExplanation = {
   headline: string;
   personaDescription: string;
   keywords: string[];
-  reasonBullets: string[];
+  memeOrigin: string;
+  reasonText: string;
+  rarity: PersonaRarity;
+  relatedCompanies: string[];
 };

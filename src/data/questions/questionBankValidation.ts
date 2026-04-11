@@ -1,7 +1,5 @@
-import type {
-  DIMENSION_LABELS,
-  Question,
-} from "../../domain/questions/types";
+import type { Question } from "../../domain/questions/types";
+import { personaProfiles } from "../personas/personaProfiles";
 
 const FORBIDDEN_WORKPLACE_PATTERNS = [
   "工作",
@@ -32,7 +30,6 @@ const FORBIDDEN_WORKPLACE_PATTERNS = [
   "版本",
   "迭代",
   "上线",
-  "复盘",
   "赛道",
   "打法",
   "转化",
@@ -51,11 +48,6 @@ const FORBIDDEN_WORKPLACE_PATTERNS = [
   "pipeline",
 ];
 
-type ValidateQuestionBankSemanticsInput = {
-  questions: Question[];
-  dimensionLabels: Record<keyof typeof DIMENSION_LABELS, string>;
-};
-
 function findMatchedPattern(input: string) {
   const lowerCased = input.toLowerCase();
 
@@ -64,50 +56,25 @@ function findMatchedPattern(input: string) {
   );
 }
 
-export function validateQuestionBankSemantics({
-  questions,
-  dimensionLabels,
-}: ValidateQuestionBankSemanticsInput) {
+const NORMAL_PERSONA_IDS = new Set(
+  personaProfiles
+    .filter((p) => p.rarity === "normal")
+    .map((p) => p.id),
+);
+
+export function validateQuestionBankSemantics(questions: Question[]) {
   if (questions.length !== 12) {
-    throw new Error(`Question bank must contain exactly 12 questions, received ${questions.length}`);
-  }
-
-  for (const [dimensionKey, label] of Object.entries(dimensionLabels)) {
-    const matchedPattern = findMatchedPattern(label);
-
-    if (matchedPattern) {
-      throw new Error(
-        `Dimension label "${dimensionKey}" contains forbidden workplace language: ${matchedPattern}`,
-      );
-    }
-  }
-
-  const totalAbsurdCount = questions.reduce(
-    (count, question) =>
-      count + question.options.filter((opt) => opt.tone === "absurd").length,
-    0,
-  );
-
-  if (totalAbsurdCount !== 3) {
     throw new Error(
-      `Question bank must contain exactly 3 absurd options in total, found ${totalAbsurdCount}`,
+      `Question bank must contain exactly 12 questions, received ${questions.length}`,
     );
   }
+
+  const personaCoverage = new Map<string, number>();
 
   for (const question of questions) {
     if (question.options.length !== 4) {
       throw new Error(
         `Question "${question.id}" must contain exactly 4 options`,
-      );
-    }
-
-    const absurdOptions = question.options.filter(
-      (option) => option.tone === "absurd",
-    );
-
-    if (absurdOptions.length > 1) {
-      throw new Error(
-        `Question "${question.id}" must contain at most 1 absurd option, found ${absurdOptions.length}`,
       );
     }
 
@@ -137,6 +104,23 @@ export function validateQuestionBankSemantics({
           );
         }
       }
+
+      for (const personaId of Object.keys(option.personaWeights)) {
+        personaCoverage.set(
+          personaId,
+          (personaCoverage.get(personaId) ?? 0) + 1,
+        );
+      }
+    }
+  }
+
+  for (const personaId of NORMAL_PERSONA_IDS) {
+    const count = personaCoverage.get(personaId) ?? 0;
+
+    if (count < 3) {
+      throw new Error(
+        `Normal persona "${personaId}" must appear in at least 3 options, found ${count}`,
+      );
     }
   }
 

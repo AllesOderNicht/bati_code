@@ -7,18 +7,16 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import type { CompanyProfileRegistry } from "./domain/company/types";
-import { buildExplanation } from "./domain/scoring/buildExplanation";
-import { resolvePrimaryResult } from "./domain/scoring/resolvePrimaryResult";
-import { scoreQuiz } from "./domain/scoring/scoreQuiz";
 import type { Question } from "./domain/questions/types";
-import { companyBaseProfiles } from "./data/companies/companyBaseProfiles";
-import { companyCopyProfiles } from "./data/companies/companyCopyProfiles";
-import { companyGovernanceProfiles } from "./data/companies/companyGovernanceProfiles";
-import { companyScoreProfiles } from "./data/companies/companyScoreProfiles";
+import { scorePersonaQuiz } from "./domain/scoring/scorePersonaQuiz";
+import { rollSSR } from "./domain/scoring/ssrRoll";
+import { detectConcentration } from "./domain/scoring/concentrationDetect";
+import { resolvePersonaResult } from "./domain/scoring/resolvePersonaResult";
+import { buildPersonaExplanation } from "./domain/scoring/buildPersonaExplanation";
 import { questionBank } from "./data/questions/questionBank";
+import { personaProfiles } from "./data/personas/personaProfiles";
 import { CompanyCatalogPage } from "./features/companies/CompanyCatalogPage";
-import { createCompanyCatalogItems } from "./features/companies/company-catalog-view-model";
+import { createPersonaGalleryItems } from "./features/companies/company-catalog-view-model";
 import { ResultPage } from "./features/result/ResultPage";
 import { guardResultPageState } from "./features/result/result-copy-guard";
 import { createResultViewModel } from "./features/result/result-view-model";
@@ -26,107 +24,71 @@ import { createResultViewModel } from "./features/result/result-view-model";
 type AppProps = {
   title?: string;
   questions?: Question[];
-  registry?: CompanyProfileRegistry;
 };
 
 type Screen = "intro" | "quiz" | "result";
-
-const defaultRegistry: CompanyProfileRegistry = {
-  baseProfiles: companyBaseProfiles,
-  scoreProfiles: companyScoreProfiles,
-  copyProfiles: companyCopyProfiles,
-  governanceProfiles: companyGovernanceProfiles,
-};
 
 const WOBBLY_CARD = "255px 15px 225px 15px / 15px 225px 15px 255px";
 const WOBBLY_OPTION = "95px 4px 92px 5px / 5px 80px 6px 95px";
 const WOBBLY_CHIP = "255px 12px 245px 14px / 14px 210px 12px 255px";
 const WOBBLY_BUTTON = "15px 225px 15px 255px / 255px 15px 225px 15px";
 const BATI_BASE_ROUTE = "/bati";
-const BATI_COMPANIES_ROUTE = "/bati/companies";
+const BATI_GALLERY_ROUTE = "/bati/gallery";
 
 export function App({
   title = "BATI 大厂气质测试",
   questions = questionBank,
-  registry = defaultRegistry,
 }: AppProps) {
   return (
     <BrowserRouter>
-      <AppShell title={title} questions={questions} registry={registry} />
+      <AppShell title={title} questions={questions} />
     </BrowserRouter>
   );
 }
 
 type AppShellProps = Required<AppProps>;
 
-function AppShell({
-  title,
-  questions,
-  registry,
-}: AppShellProps) {
+function AppShell({ title, questions }: AppShellProps) {
   const navigate = useNavigate();
   const [screen, setScreen] = useState<Screen>("intro");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const answeredCount = Object.keys(answers).length;
 
   const currentQuestion = questions[currentIndex];
   const selectedOptionId = currentQuestion ? answers[currentQuestion.id] : undefined;
   const progressLabel = `第 ${currentIndex + 1} / ${questions.length} 题`;
   const progress = ((currentIndex + 1) / questions.length) * 100;
 
-  const rankedResults = useMemo(
-    () =>
-      scoreQuiz({
-        answers,
-        questions,
-        companyScoreProfiles: registry.scoreProfiles,
-      }),
-    [answers, questions, registry],
-  );
-
   const resultPageState = useMemo(() => {
-    const primaryResult = resolvePrimaryResult({
-      rankedResults,
-      companyBaseProfiles: registry.baseProfiles,
-      governanceProfiles: registry.governanceProfiles,
-    });
+    const answeredCount = Object.keys(answers).length;
 
-    if (!primaryResult) {
-      return guardResultPageState({});
+    if (answeredCount < questions.length) {
+      return guardResultPageState(null);
     }
 
-    const explanation = buildExplanation({
-      primaryResult,
-      copyProfiles: registry.copyProfiles,
-    });
+    const ranked = scorePersonaQuiz(answers, questions);
+    const ssrResult = rollSSR(answers, questions);
+    const concentrationResult = detectConcentration(ranked);
+    const finalResult = resolvePersonaResult(ranked, ssrResult, concentrationResult);
 
-    const viewModel = createResultViewModel({
-      primaryResult,
-      explanation,
-      baseProfiles: registry.baseProfiles,
-      copyProfiles: registry.copyProfiles,
-    });
+    if (!finalResult) {
+      return guardResultPageState(null);
+    }
 
-    const governanceProfile = registry.governanceProfiles.find(
-      (profile) => profile.companyId === primaryResult.companyId,
-    );
+    const explanation = buildPersonaExplanation(finalResult);
 
-    return guardResultPageState({
-      companyId: primaryResult.companyId,
-      viewModel,
-      governanceProfile,
-    });
-  }, [rankedResults, registry]);
+    if (!explanation) {
+      return guardResultPageState(null);
+    }
 
-  const companyCatalogItems = useMemo(
-    () =>
-      createCompanyCatalogItems({
-        baseProfiles: registry.baseProfiles,
-        questions,
-        scoreProfiles: registry.scoreProfiles,
-      }),
-    [questions, registry.baseProfiles, registry.scoreProfiles],
+    const viewModel = createResultViewModel(finalResult, explanation);
+
+    return guardResultPageState(viewModel);
+  }, [answers, questions]);
+
+  const galleryItems = useMemo(
+    () => createPersonaGalleryItems(personaProfiles),
+    [],
   );
 
   const resetSession = (nextScreen: Screen) => {
@@ -141,9 +103,7 @@ function AppShell({
   };
 
   const handleSelect = (optionId: string) => {
-    if (!currentQuestion) {
-      return;
-    }
+    if (!currentQuestion) return;
 
     setAnswers((previous) => ({
       ...previous,
@@ -152,15 +112,11 @@ function AppShell({
   };
 
   const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((previous) => previous - 1);
-    }
+    if (currentIndex > 0) setCurrentIndex((previous) => previous - 1);
   };
 
   const handleNext = () => {
-    if (!selectedOptionId) {
-      return;
-    }
+    if (!selectedOptionId) return;
 
     if (currentIndex === questions.length - 1) {
       setScreen("result");
@@ -181,11 +137,7 @@ function AppShell({
     navigate(BATI_BASE_ROUTE);
   };
 
-  const handleOpenCatalog = () => {
-    navigate(BATI_COMPANIES_ROUTE);
-  };
-
-  const handleBackFromCatalog = () => {
+  const handleBackFromGallery = () => {
     if (screen === "intro") {
       handleStart();
       return;
@@ -208,30 +160,12 @@ function AppShell({
         element={
           <main className="min-h-screen p-6 sm:p-4">
             <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
-              <div className="flex justify-end">
-                <button
-                  className="border bg-surface px-4 py-3 font-mono text-[0.85rem] font-semibold text-foreground transition-all duration-200 hover:border-border-strong hover:shadow-glow active:translate-x-[3px] active:translate-y-[3px] active:shadow-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
-                  onClick={handleOpenCatalog}
-                  type="button"
-                  style={{
-                    borderRadius: WOBBLY_CHIP,
-                    borderColor: "var(--color-border)",
-                    boxShadow: "var(--shadow-card)",
-                  }}
-                >
-                  查看全厂图谱
-                </button>
-              </div>
-
               <div className="grid min-h-[calc(100vh-7.5rem)] place-items-center">
                 <>
                   {screen === "intro" ? (
                     <section
                       className="w-full max-w-[480px] p-8 sm:p-6 bg-surface border border-border text-center animate-fade-in"
-                      style={{
-                        borderRadius: WOBBLY_CARD,
-                        boxShadow: "var(--shadow-sketch-md)",
-                      }}
+                      style={{ borderRadius: WOBBLY_CARD, boxShadow: "var(--shadow-sketch-md)" }}
                       aria-labelledby="hero-title"
                     >
                       <p className="m-0 mb-3 font-mono text-accent text-[0.85rem] font-semibold tracking-[0.15em] uppercase">
@@ -250,11 +184,7 @@ function AppShell({
                         className="mt-6 w-full py-[18px] px-5 border bg-accent text-accent-fg text-[1.1rem] font-mono font-bold transition-all duration-200 hover:shadow-glow active:translate-x-[3px] active:translate-y-[3px] active:shadow-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
                         type="button"
                         onClick={handleStart}
-                        style={{
-                          borderRadius: WOBBLY_BUTTON,
-                          borderColor: "var(--color-border-strong)",
-                          boxShadow: "var(--shadow-sketch)",
-                        }}
+                        style={{ borderRadius: WOBBLY_BUTTON, borderColor: "var(--color-border-strong)", boxShadow: "var(--shadow-sketch)" }}
                       >
                         开始测你的厂味
                       </button>
@@ -265,10 +195,7 @@ function AppShell({
                     <section className="w-full max-w-[560px] animate-fade-in">
                       <article
                         className="w-full p-6 sm:p-6 bg-surface border border-border"
-                        style={{
-                          borderRadius: WOBBLY_CARD,
-                          boxShadow: "var(--shadow-sketch-md)",
-                        }}
+                        style={{ borderRadius: WOBBLY_CARD, boxShadow: "var(--shadow-sketch-md)" }}
                         aria-labelledby="question-title"
                       >
                         <div className="mb-5" aria-label="答题进度">
@@ -287,10 +214,7 @@ function AppShell({
                           >
                             <span
                               className="block h-full bg-accent transition-[width] duration-200 ease-out"
-                              style={{
-                                width: `${progress}%`,
-                                borderRadius: "inherit",
-                              }}
+                              style={{ width: `${progress}%`, borderRadius: "inherit" }}
                             />
                           </div>
                         </div>
@@ -319,9 +243,7 @@ function AppShell({
                                 aria-pressed={selected}
                                 style={{
                                   borderRadius: WOBBLY_OPTION,
-                                  boxShadow: selected
-                                    ? "none"
-                                    : "var(--shadow-card)",
+                                  boxShadow: selected ? "none" : "var(--shadow-card)",
                                 }}
                               >
                                 {option.label}
@@ -333,31 +255,23 @@ function AppShell({
                         <div className={`mt-6 grid gap-3 ${currentIndex > 0 ? "grid-cols-[1fr_2fr]" : ""}`}>
                           {currentIndex > 0 ? (
                             <button
-                              className="py-[18px] px-4 border bg-surface text-muted text-[1.05rem] font-mono font-medium transition-all duration-200 hover:text-foreground hover:border-border-strong hover:shadow-glow active:translate-x-[3px] active:translate-y-[3px] active:shadow-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+                              className="py-[18px] px-4 border bg-surface text-muted text-[1.05rem] font-mono font-medium transition-all duration-200 hover:text-foreground hover:border-border-strong hover:shadow-glow active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
                               type="button"
                               onClick={handlePrevious}
-                              style={{
-                                borderRadius: WOBBLY_BUTTON,
-                                borderColor: "var(--color-border)",
-                                boxShadow: "var(--shadow-card)",
-                              }}
+                              style={{ borderRadius: WOBBLY_BUTTON, borderColor: "var(--color-border)", boxShadow: "var(--shadow-card)" }}
                             >
                               上一题
                             </button>
                           ) : null}
                           <button
-                            className="py-[18px] px-5 border bg-accent text-accent-fg text-[1.05rem] font-mono font-bold transition-all duration-200 hover:not-disabled:shadow-glow active:not-disabled:translate-x-[3px] active:not-disabled:translate-y-[3px] active:not-disabled:shadow-none disabled:cursor-not-allowed disabled:opacity-35 disabled:bg-surface-alt disabled:text-muted disabled:border-border focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+                            className="py-[18px] px-5 border bg-accent text-accent-fg text-[1.05rem] font-mono font-bold transition-all duration-200 hover:not-disabled:shadow-glow active:not-disabled:translate-x-[3px] active:not-disabled:translate-y-[3px] active:not-disabled:shadow-none disabled:cursor-not-allowed disabled:opacity-35 disabled:bg-surface-alt disabled:text-muted disabled:border-border"
                             type="button"
                             onClick={handleNext}
                             disabled={!selectedOptionId}
                             style={{
                               borderRadius: WOBBLY_BUTTON,
-                              borderColor: !selectedOptionId
-                                ? "var(--color-border)"
-                                : "var(--color-border-strong)",
-                              boxShadow: !selectedOptionId
-                                ? "none"
-                                : "var(--shadow-sketch)",
+                              borderColor: !selectedOptionId ? "var(--color-border)" : "var(--color-border-strong)",
+                              boxShadow: !selectedOptionId ? "none" : "var(--shadow-sketch)",
                             }}
                           >
                             {currentIndex === questions.length - 1 ? "查看结果" : "下一题"}
@@ -370,7 +284,6 @@ function AppShell({
                   {screen === "result" ? (
                     <ResultPage
                       onBackHome={handleBackHome}
-                      onOpenCatalog={handleOpenCatalog}
                       onRestart={handleRestart}
                       state={resultPageState}
                     />
@@ -382,23 +295,18 @@ function AppShell({
         }
       />
       <Route
-        path={BATI_COMPANIES_ROUTE}
+        path={BATI_GALLERY_ROUTE}
         element={
           <CompanyCatalogPage
-            answeredCount={answeredCount}
             backPrimaryLabel={backPrimaryLabel}
-            items={companyCatalogItems}
+            items={galleryItems}
             onBackHome={handleBackHome}
-            onBackPrimary={handleBackFromCatalog}
-            questionCount={questions.length}
+            onBackPrimary={handleBackFromGallery}
           />
         }
       />
       <Route path="/" element={<Navigate replace to={BATI_BASE_ROUTE} />} />
-      <Route
-        path="/companies"
-        element={<Navigate replace to={BATI_COMPANIES_ROUTE} />}
-      />
+      <Route path="/companies" element={<Navigate replace to={BATI_GALLERY_ROUTE} />} />
       <Route path="*" element={<Navigate replace to={BATI_BASE_ROUTE} />} />
     </Routes>
   );
