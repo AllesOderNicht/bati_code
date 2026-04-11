@@ -13,10 +13,15 @@ export function buildPersonaExplanation(
   return {
     headline: profile.headline,
     personaDescription: profile.personaDescription,
+    deepInsight: profile.deepInsight,
+    funComment: profile.funComment,
+    dailyHabits: profile.dailyHabits,
+    funFacts: profile.funFacts,
     keywords: profile.keywords,
     memeOrigin: profile.memeOrigin,
     reasonText: profile.reasonTemplate,
     rarity: profile.rarity,
     relatedCompanies: profile.relatedCompanies,
+    ssrExclusiveNote: profile.ssrExclusiveNote ?? null,
   };
 }

@@ -67,3 +67,26 @@
     color: var(--color-foreground);
   }
 }
+
+@layer components {
+  .result-action-btn {
+    @apply py-3.5 px-5 font-mono text-[0.9rem] font-semibold rounded-xl
+           transition-all duration-200 cursor-pointer
+           focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2;
+  }
+
+  .result-action-btn--primary {
+    @apply bg-accent text-accent-fg border border-accent
+           hover:shadow-glow active:translate-y-px;
+  }
+
+  .result-action-btn--secondary {
+    @apply bg-surface text-foreground border border-border
+           hover:border-border-strong hover:shadow-glow active:translate-y-px;
+  }
+
+  .result-action-btn--ghost {
+    @apply bg-transparent text-muted border-none
+           hover:text-foreground active:translate-y-px;
+  }
+}

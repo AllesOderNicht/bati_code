@@ -69,7 +69,7 @@ describe("App", () => {
       await user.click(screen.getByRole("button", { name: actionLabel }));
     }
 
-    expect(screen.getByText("BATI V2 结果")).toBeInTheDocument();
+    expect(screen.getByText("BATI V2")).toBeInTheDocument();
   });
 
   it("renders the persona gallery route", () => {

@@ -30,9 +30,14 @@ export type FinalPersonaResult = {
 export type PersonaExplanation = {
   headline: string;
   personaDescription: string;
+  deepInsight: string;
+  funComment: string;
+  dailyHabits: string[];
+  funFacts: string[];
   keywords: string[];
   memeOrigin: string;
   reasonText: string;
   rarity: PersonaRarity;
   relatedCompanies: string[];
+  ssrExclusiveNote: string | null;
 };

@@ -8,8 +8,13 @@ export type PersonaProfile = {
   memeOrigin: string;
   headline: string;
   personaDescription: string;
+  deepInsight: string;
+  funComment: string;
+  dailyHabits: string[];
+  funFacts: string[];
   keywords: string[];
   reasonTemplate: string;
   ssrBaseProbability?: number;
   concentrationCompanyGroup?: string;
+  ssrExclusiveNote?: string;
 };

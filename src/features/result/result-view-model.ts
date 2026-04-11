@@ -20,9 +20,14 @@ export type ResultViewModel = {
   memeOrigin: string;
   rarity: PersonaRarity;
   personaDescription: string;
+  deepInsight: string;
+  funComment: string;
+  dailyHabits: string[];
+  funFacts: string[];
   keywords: string[];
   reasonText: string;
   shareTone: string;
+  ssrExclusiveNote: string | null;
 };
 
 function buildShareTone(
@@ -58,8 +63,13 @@ export function createResultViewModel(
     memeOrigin: explanation.memeOrigin,
     rarity: explanation.rarity,
     personaDescription: explanation.personaDescription,
+    deepInsight: explanation.deepInsight,
+    funComment: explanation.funComment,
+    dailyHabits: explanation.dailyHabits,
+    funFacts: explanation.funFacts,
     keywords: explanation.keywords,
     reasonText: explanation.reasonText,
     shareTone: buildShareTone(explanation.headline, explanation.rarity),
+    ssrExclusiveNote: explanation.ssrExclusiveNote,
   };
 }
