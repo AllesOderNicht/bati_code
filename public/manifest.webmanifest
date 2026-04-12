@@ -1,0 +1,11 @@
+{
+  "name": "BATI分析",
+  "short_name": "BATI分析",
+  "description": "BATI分析是一个轻量、有梗的互联网人格测试。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a"
+}

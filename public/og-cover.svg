@@ -1,0 +1,24 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#0A0A0A" />
+  <rect x="36" y="36" width="1128" height="558" rx="30" fill="#121212" stroke="#B98643" stroke-width="3" />
+  <circle cx="126" cy="122" r="18" fill="#B98643" fill-opacity="0.18" />
+  <circle cx="1078" cy="520" r="28" fill="#B98643" fill-opacity="0.12" />
+  <path d="M77 92C118 79 170 86 201 111" stroke="#D8B06B" stroke-width="4" stroke-linecap="round" />
+  <path d="M966 544C1011 523 1076 526 1123 560" stroke="#D8B06B" stroke-width="4" stroke-linecap="round" />
+  <text x="84" y="118" fill="#B98643" font-family="JetBrains Mono, monospace" font-size="26" font-weight="700" letter-spacing="4">
+    BATI ANALYSIS
+  </text>
+  <text x="84" y="266" fill="#F6E7C8" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="92" font-weight="700">
+    BATIê
+  </text>
+  <text x="84" y="356" fill="#D8B06B" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="42" font-weight="500">
+    íTQ∫<K’
+  </text>
+  <text x="84" y="430" fill="#C8B08A" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28">
+    `ÑíTQ∫<ÙœÍÕ'Çó∫æ
+  </text>
+  <rect x="84" y="478" width="304" height="60" rx="30" fill="#B98643" fill-opacity="0.14" stroke="#B98643" />
+  <text x="118" y="516" fill="#F6E7C8" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700">
+    www.alleschen.com/bati
+  </text>
+</svg>

@@ -1,0 +1,13 @@
+{
+  "branch": "feat/version4",
+  "change_dir": "feat-version4",
+  "stage": "verifying",
+  "question_checkpoint": 3,
+  "created_at": "2026-04-11T00:00:00.000Z",
+  "updated_at": "2026-04-11T00:07:00.000Z",
+  "current_phase": null,
+  "phases": [
+    { "id": "PH-1", "title": "题库设计与人设 Keywords 对齐", "status": "completed", "summary": "questionBank.ts: 12 道多维度题目全量重写（混合场景/偏好/趣味风格），每选项 3-5 人设权重（1/2/3 三档） | personaProfiles.ts: 6 个普通人设 keywords 调整 | 权重均衡 max/min < 1.2，每人设 >= 8 次出现" },
+    { "id": "PH-2", "title": "阈值调整、测试与验证", "status": "completed", "summary": "concentrationDetect.ts: 阈值 0.35→0.30 | questionBankValidation.ts: 最低覆盖 3→8 | questionBankWeightDistribution.test.ts: 新建 21 测试（静态分布+12专属通路+蒙特卡洛模拟+3浓度可触发+2区分度） | 修复 App/ResultPage/concentration 4 个现有测试 | 57/57 tests passing" }
+  ]
+}
